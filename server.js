@@ -5,7 +5,9 @@ const path = require('path');
 const port = 9000;
 
 const server = http.createServer((req, res) => {
-    let filePath = '.' + req.url;
+    // Remove query strings (ex: ?v=2.1)
+    const cleanUrl = req.url.split('?')[0];
+    let filePath = '.' + cleanUrl;
     if (filePath === './') {
         filePath = './index.html';
     }
