@@ -67,6 +67,23 @@
             margin-bottom: 10px;
         }
     </style>
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '624262646647561');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=624262646647561&ev=PageView&noscript=1" /></noscript>
 </head>
 
 <body>
@@ -93,7 +110,8 @@
             <div class="radar-scan"></div>
             <h1 style="font-size: 1.8rem; color: white;">TESTE DE VITALIDADE MASCULINA</h1>
             <p style="color: #aaa; margin: 15px 0;">Responda 7 perguntas rápidas para descobrir a causa da sua
-                <strong>FALHA NA HORA H</strong>.</p>
+                <strong>FALHA NA HORA H</strong>.
+            </p>
             <p style="color: #dc2626; font-size: 0.9rem; margin-bottom: 20px;">⚠️ Atenção: Análise confidencial para
                 homens.</p>
             <button class="next-btn pulse" onclick="goToStep(1)">INICIAR ANÁLISE ➤</button>
@@ -183,7 +201,8 @@
         <div id="step-7" class="question-card hidden-step">
             <p class="question-text">PASSO 7/7: Última checagem.</p>
             <p style="color: #ccc; margin-bottom: 20px;">Nosso sistema detectou que seu caso é
-                <strong>COMPATÍVEL</strong> com o <strong style="color: #f59e0b">Protocolo Alpha-X</strong>.</p>
+                <strong>COMPATÍVEL</strong> com o <strong style="color: #f59e0b">Protocolo Alpha-X</strong>.
+            </p>
             <p class="question-text">Você se compromete a assistir ao vídeo explicativo até o final?</p>
             <div class="options">
                 <button class="option-btn pulse" style="background: #16a34a; color: white; border: none;"
