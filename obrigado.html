@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parabéns! Pedido Confirmado</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .success-icon {
+            font-size: 5rem;
+            color: #16a34a;
+            margin-bottom: 20px;
+            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .step-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .step-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            font-weight: bold;
+            padding: 15px;
+            display: block;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body style="background-color: #f3f4f6;">
+
+    <div class="container content-narrow" style="padding: 50px 0; text-align: center;">
+
+        <i class="fas fa-check-circle success-icon"></i>
+
+        <h1 style="color: #1f2937; margin-bottom: 15px;">Parabéns! Seu pedido foi confirmado!</h1>
+        <p style="font-size: 1.2rem; color: #4b5563; margin-bottom: 40px;">
+            Você acaba de tomar a melhor decisão para o seu corpo. Em breve você receberá os dados de rastreio no seu
+            e-mail.
+        </p>
+
+        <h2 style="text-align: left; margin-bottom: 20px; color: #374151;">👇 PRÓXIMOS PASSOS OBRIGATÓRIOS:</h2>
+
+        <!-- PASSO 1 -->
+        <div class="step-box">
+            <div class="step-title" style="color: #25D366;">
+                <i class="fab fa-whatsapp"></i> PASSO 1: Entre no Grupo VIP
+            </div>
+            <p>Para receber dicas exclusivas, cardápios e falar com nossa equipe de suporte, entre no grupo VIP do
+                WhatsApp.</p>
+            <a href="#" class="btn-whatsapp">ENTRAR NO GRUPO VIP AGORA</a>
+        </div>
+
+        <!-- PASSO 2 -->
+        <div class="step-box">
+            <div class="step-title" style="color: var(--primary-color);">
+                <i class="fas fa-book-open"></i> PASSO 2: Baixe seu E-book
+            </div>
+            <p>Seu "Cardápio Acelerador" já está disponível para download.</p>
+            <a href="#"
+                style="color: var(--primary-color); font-weight: bold; text-decoration: underline; display: block; margin-top: 10px;">
+                Download E-book PDF (2.5MB)
+            </a>
+        </div>
+
+        <!-- PASSO 3 -->
+        <div class="step-box">
+            <div class="step-title" style="color: #4b5563;">
+                <i class="fas fa-envelope"></i> PASSO 3: Verifique seu E-mail
+            </div>
+            <p>Enviamos os dados de acesso e a nota fiscal para o e-mail cadastrado. Confira também na caixa de SPAM.
+            </p>
+        </div>
+
+        <p style="font-size: 0.9rem; color: #9ca3af; margin-top: 40px;">
+            Dúvidas? Envie um e-mail para suporte@gelatinamilagrosa.com.br
+        </p>
+
+    </div>
+
+</body>
+
+</html>

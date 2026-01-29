@@ -1,0 +1,553 @@
+/* RESET E ESTILOS GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #050505 !important;
+    color: white !important;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+}
+
+/* --- QUIZ & GAMIFICATION --- */
+.quiz-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.quiz-header h1 {
+    color: #ff003c;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
+}
+
+.question-card {
+    background: #111;
+    border: 1px solid #333;
+    padding: 30px;
+    border-radius: 16px;
+    margin-top: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.question-text {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: white;
+}
+
+/* BOTÕES DE OPÇÃO (Estilo Lista) */
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option-btn {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    color: white;
+    padding: 18px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: left;
+    position: relative;
+}
+
+.option-btn:hover {
+    background: #2a2a2a;
+    border-color: #8b5cf6;
+    transform: scale(1.02);
+}
+
+.option-btn:after {
+    content: '➜';
+    position: absolute;
+    right: 20px;
+    opacity: 0.5;
+}
+
+/* --- VSL & LANDING PAGE --- */
+.hero {
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+    }
+
+    70% {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 10px rgba(22, 163, 74, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- AGRESSIVE VSL STYLES (HEADER, VIDEO, GALERIA) --- */
+.aggressive-header {
+    background: #ff003c;
+    color: white;
+    padding: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% {
+        background: #ff003c;
+    }
+
+    50% {
+        background: #b91c1c;
+    }
+
+    100% {
+        background: #ff003c;
+    }
+}
+
+.headline-box h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.video-wrapper {
+    border: 4px dashed #ff003c;
+    background: #000;
+    margin-top: 20px;
+    box-shadow: 0 0 30px rgba(255, 0, 60, 0.3);
+    position: relative;
+}
+
+.video-wrapper::before {
+    content: 'CONTEÚDO SENSÍVEL: PODE SER REMOVIDO';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #ff003c;
+    padding: 0 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+/* CTA BUTTON (Legacy/Fallback) */
+.cta-button {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    background: #16a34a;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* --- PRICING CARDS (NEW) --- */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+@media (min-width: 768px) {
+    .pricing-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+}
+
+.pricing-card {
+    background: #18181b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pricing-card:hover {
+    transform: translateY(-5px);
+    border-color: #f59e0b;
+}
+
+.pricing-card.featured {
+    border: 2px solid #16a34a;
+    background: #1a2e1a;
+    transform: scale(1.02);
+}
+
+.badge-featured {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #16a34a;
+    color: white;
+    padding: 5px 15px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.badge-sample {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #dc2626;
+    color: white;
+    padding: 5px 15px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #e5e7eb;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.card-price {
+    margin: 15px 0;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.new-price {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #ffffff;
+}
+
+.frete-info {
+    font-size: 0.85rem;
+    color: #f59e0b;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.buy-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.2s;
+}
+
+/* IMAGE CARD STYLE (White bg fix) */
+.pricing-card img {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-sample {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-sample:hover {
+    background: #b91c1c;
+}
+
+.btn-kit {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-kit:hover {
+    background: #15803d;
+}
+
+
+/* --- GAMIFICATION ELEMENTS (NEW) --- */
+
+/* 1. Radar Animation */
+.radar-scan {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+    border: 2px solid #8b5cf6;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+}
+
+.radar-scan::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 2px;
+    background: #8b5cf6;
+    transform-origin: 0 0;
+    animation: radar-spin 2s infinite linear;
+    box-shadow: 0 0 10px #fff;
+}
+
+@keyframes radar-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 2. Body Part Selector (GRID CORRIGIDO) */
+.body-zones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* 2 Colunas Fixas */
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.zone-btn {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    padding: 25px 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 140px;
+    /* Altura fixa */
+}
+
+.zone-btn i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.zone-btn.selected {
+    background: rgba(220, 38, 38, 0.2);
+    border-color: #dc2626;
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+}
+
+.zone-btn.selected i {
+    color: #dc2626;
+}
+
+/* 3. Slider Interativo */
+.slider-container {
+    margin: 30px 0;
+}
+
+.range-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+    outline: none;
+    opacity: 0.8;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #8b5cf6;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #8b5cf6;
+}
+
+.weight-display {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.weight-diff {
+    color: #16a34a;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* 4. Terminal Text Loading */
+.terminal-log {
+    text-align: left;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #0f0;
+    background: #000;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    height: 180px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.log-line {
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeInLog 0.2s forwards;
+}
+
+.log-error {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+@keyframes fadeInLog {
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* --- GALERIA DE PROVA SOCIAL --- */
+.transformation-gallery {
+    background: #18191a;
+    padding: 40px 20px;
+    margin-top: 40px;
+    border-top: 1px solid #333;
+}
+
+.gallery-title {
+    color: #e4e6eb;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.gallery-card {
+    background: #242526;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid #3e4042;
+}
+
+.card-header {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.user-info strong {
+    display: block;
+    color: #e4e6eb;
+    font-size: 0.95rem;
+}
+
+.user-info span {
+    color: #b0b3b8;
+    font-size: 0.8rem;
+}
+
+.verified-badge {
+    color: #2d88ff;
+    margin-left: 5px;
+}
+
+.card-footer {
+    padding: 10px;
+    color: #e4e6eb;
+    font-size: 0.9rem;
+    border-top: 1px solid #3e4042;
+    text-align: left;
+}

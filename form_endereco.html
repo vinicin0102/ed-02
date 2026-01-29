@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Envio da Amostra Grátis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-stripe {
+            width: 100%;
+            background: #ff003c;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .product-summary {
+            background: linear-gradient(145deg, #111 0%, #050505 100%);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .product-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 60, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ff003c;
+            color: #ff003c;
+            font-size: 1.5rem;
+        }
+
+        .form-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px 20px;
+            color: #333;
+        }
+
+        .form-title {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #111;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #ff003c;
+            outline: none;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(34, 197, 94, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: #16a34a;
+        }
+
+        .shipping-info {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .security-footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .timer-bar {
+            background: #fee2e2;
+            color: #991b1b;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-stripe">
+        🎉 PARABÉNS! VOCÊ GARANTIU UM SLOT DE AMOSTRA GRÁTIS
+    </div>
+
+    <div class="container">
+        <!-- Resumo do Pedido -->
+        <div class="product-summary">
+            <div class="product-icon">
+                <i class="fas fa-capsules"></i>
+            </div>
+            <div>
+                <h3 style="color: white; font-size: 1.1rem;">Kit Amostra Mounjatina (7 Dias)</h3>
+                <p style="color: #aaa; font-size: 0.85rem; margin-top: 4px;">Valor do Produto: <span
+                        style="color: #22c55e;">R$ 0,00</span></p>
+                <p style="color: #aaa; font-size: 0.85rem;">Frete e Manuseio: <strong>R$ 19,90</strong></p>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="form-box">
+            <h2 class="form-title">Onde devemos entregar? 🚚</h2>
+
+            <div class="timer-bar">
+                ⏱️ Reserve sua amostra por: <span id="timer">10:00</span> minutos
+            </div>
+
+            <div class="shipping-info">
+                <i class="fas fa-check-circle"></i>
+                <span>Frete fixo de R$ 19,90 aplicado para todo Brasil.</span>
+            </div>
+
+            <form action="https://pay.cakto.com.br/seed-checkout-link" method="GET" id="addressForm">
+                <!-- Nota: a action acima deve ser substituída pelo link de checkout real do usuário se ele quiser passar parametros via URL, ou redirecionar via JS -->
+
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" class="form-control" name="name" placeholder="Digite seu nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp</label>
+                    <input type="tel" class="form-control" name="phone" placeholder="(DDD) 99999-9999" required>
+                </div>
+
+                <div class="form-group">
+                    <label>CEP</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" class="form-control" name="zipcode" placeholder="00000-000" style="flex: 1;"
+                            required onblur="buscarCep(this.value)">
+                        <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank"
+                            style="padding: 10px; display: flex; align-items: center; color: #666; font-size: 0.8rem; text-decoration: none; border: 1px solid #ddd; border-radius: 8px;">Não
+                            sei</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col form-group" style="flex: 2;">
+                        <label>Rua</label>
+                        <input type="text" class="form-control" name="street" id="rua" required>
+                    </div>
+                    <div class="col form-group" style="flex: 1;">
+                        <label>Número</label>
+                        <input type="text" class="form-control" name="number" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col form-group">
+                        <label>Bairro</label>
+                        <input type="text" class="form-control" name="neighborhood" id="bairro" required>
+                    </div>
+                    <div class="col form-group">
+                        <label>Cidade</label>
+                        <input type="text" class="form-control" name="city" id="cidade" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Estado</label>
+                    <input type="text" class="form-control" name="state" id="uf" required style="width: 80px;">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    IR PARA PAGAMENTO DO FRETE <i class="fas fa-lock"></i>
+                </button>
+
+                <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #666;">
+                    <i class="fas fa-lock"></i> Seus dados estão 100% seguros.
+                </p>
+            </form>
+        </div>
+
+        <div class="security-footer">
+            <span>Copyright 2026</span>
+            <span>Termos de Uso</span>
+            <span>Políticas de Privacidade</span>
+        </div>
+    </div>
+
+    <script>
+        // Simples script para preencher endereço via CEP (opcional, mas adiciona valor)
+        function buscarCep(cep) {
+            cep = cep.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('rua').value = data.logradouro;
+                            document.getElementById('bairro').value = data.bairro;
+                            document.getElementById('cidade').value = data.localidade;
+                            document.getElementById('uf').value = data.uf;
+                        }
+                    })
+                    .catch(() => console.log('Erro ao buscar CEP'));
+            }
+        }
+
+        // Timer de escassez simples
+        let time = 600; // 10 minutes
+        const timerElement = document.getElementById('timer');
+
+        setInterval(() => {
+            if (time > 0) {
+                time--;
+                let minutes = Math.floor(time / 60);
+                let seconds = time % 60;
+                timerElement.innerText = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+            }
+        }, 1000);
+
+        // Redirecionamento no Submit (Simulação de integração)
+        // O usuário final provavelmente vai querer substituir isso pelo link direto do checkout com os parametros utm
+        document.getElementById('addressForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            // Aqui normalmente se enviaria os dados para um webhook ou CRM
+            // E depois redirecionaria para o checkout do frete
+
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = 'PROCESSANDO...';
+            btn.style.opacity = '0.8';
+
+            setTimeout(() => {
+                // REDIRECIONAR PARA O CHECKOUT DO FRETE (R$ 19,90)
+                // Link real do checkout
+                window.location.href = 'https://pay.cakto.com.br/5gmom9n_739508';
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

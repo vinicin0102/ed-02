@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner Metabólico Avançado</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* CSS Inline Específico para ajustes finos que não estão no style.css global */
+        .hidden-step {
+            display: none;
+        }
+
+        .next-btn {
+            background: linear-gradient(90deg, #ff003c, #c0002b);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+            transition: 0.3s;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 60, 0.7);
+        }
+
+        .next-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.5;
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: #0f0;
+            box-shadow: 0 0 10px #0f0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: scanMove 2s infinite linear;
+            display: none;
+            /* Ativado via JS */
+        }
+
+        @keyframes scanMove {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- QUIZ WRAPPER -->
+    <div id="quiz-wrapper" class="quiz-container">
+
+        <!-- HEADER COM BARRA DE PROGRESSO -->
+        <div class="quiz-header">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="color: #666; font-size: 0.8rem;">ID DO SCAN: #8821X</span>
+                <span style="color: #0f0; font-size: 0.8rem;"><i class="fas fa-satellite-dish"></i> ONLINE</span>
+            </div>
+            <div class="progress-container">
+                <div id="progress" class="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- STEP 0: INICIAL -->
+        <div id="step-start" class="question-card" style="text-align: center;">
+            <div class="radar-scan"></div>
+            <h1 style="font-size: 1.8rem; color: white;">SCANNER DE GORDURA PROFUNDA</h1>
+            <p style="color: #aaa; margin: 15px 0;">Nossa IA vai analisar suas falhas metabólicas em 30 segundos.</p>
+            <p style="color: #ff003c; font-size: 0.9rem; margin-bottom: 20px;">⚠️ Alta precisão. Resultados podem ser
+                chocantes.</p>
+            <button class="next-btn pulse" onclick="goToStep(1)">INICIAR ANÁLISE ➤</button>
+        </div>
+
+        <!-- STEP 1: ZONAS DE DOR (Interactive Grid) -->
+        <div id="step-1" class="question-card hidden-step">
+            <p class="question-text">PASSO 1: Onde a gordura mais te incomoda?</p>
+            <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;">(Toque nas áreas para marcar)</p>
+
+            <div class="body-zones">
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-drumstick-bite"></i>
+                    <span>Pernas / Celulite</span>
+                </div>
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-pizza-slice"></i> <!-- Icone metaforico p/ barriga -->
+                    <span>Barriga / Pochete</span> <!-- Pochete term for belly fat -->
+                </div>
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-grin-beam-sweat"></i>
+                    <span>Rosto / Papada</span>
+                </div>
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-child"></i>
+                    <span>Braços / Tchauzinho</span>
+                </div>
+            </div>
+
+            <button id="btn-step-1" class="next-btn" disabled onclick="goToStep(2)">CONTINUAR</button>
+        </div>
+
+        <!-- STEP 2: SLIDER DE PESO (Gamified Slider) -->
+        <div id="step-2" class="question-card hidden-step">
+            <p class="question-text">PASSO 2: Quanto você quer perder?</p>
+
+            <div class="slider-container">
+                <div class="weight-display"><span id="weight-val">10</span> kg</div>
+                <input type="range" min="3" max="50" value="10" class="range-slider" id="weightRange"
+                    oninput="updateWeight(this.value)">
+            </div>
+
+            <div
+                style="background: #111; padding: 15px; border-radius: 8px; border: 1px dashed #333; margin-top: 20px;">
+                <p style="color: #aaa; font-size: 0.9rem;">Estimativa de tempo para resultado:</p>
+                <div class="weight-diff" id="time-estimate">15 a 20 Dias ⚡</div>
+            </div>
+
+            <button class="next-btn" onclick="goToStep(3)">CONFIRMAR META</button>
+        </div>
+
+        <!-- STEP 3: IDADE (Botões Grandes) -->
+        <div id="step-3" class="question-card hidden-step">
+            <p class="question-text">PASSO 3: Selecione sua Idade</p>
+            <div class="options">
+                <button class="option-btn" onclick="startProcessing()">18 a 29 anos</button>
+                <button class="option-btn" onclick="startProcessing()">30 a 49 anos</button>
+                <button class="option-btn" onclick="startProcessing()">50+ anos</button>
+            </div>
+        </div>
+
+        <!-- STEP 4: PROCESSAMENTO (Terminal Hacker Style) -->
+        <div id="step-processing" class="question-card hidden-step" style="position: relative; overflow: hidden;">
+            <div class="scan-line" style="display: block;"></div>
+            <div class="radar-scan" style="width: 60px; height: 60px;"></div>
+            <h2 style="color: #8b5cf6;">PROCESSANDO DADOS...</h2>
+
+            <div id="terminal-screen" class="terminal-log">
+                <!-- Linhas inseridas via JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- VSL SECTION (Hidden Initially) -->
+    <div id="vsl-section">
+
+        <!-- FAIXA DE URGÊNCIA -->
+        <div class="aggressive-header">
+            ⚠️ <span style="color: yellow;">ALERTA VERMELHO:</span> SOLUÇÃO ENCONTRADA. VÁLIDO ATÉ <span
+                id="dynamic-date-vsl">HOJE</span>
+        </div>
+
+        <header class="hero" style="background: transparent; padding-top: 20px;">
+            <div class="container">
+                <div class="headline-box">
+                    <span
+                        style="background: #dc2626; color: white; padding: 5px 15px; font-weight: bold; font-size: 0.9rem; border-radius: 4px; box-shadow: 0 0 10px #dc2626;">
+                        ☢️ METABOLISMO EM PERIGO
+                    </span>
+                    <h1 style="color: white; margin-top: 20px; font-size: 1.8rem;">
+                        O "Scanner" Revelou: Você tem um <span
+                            style="color: #ff003c; text-decoration: underline;">Bloqueio de Gordura Profunda.</span>
+                    </h1>
+                    <p style="color: #ccc; font-size: 1rem; margin-top: 10px;">
+                        Descobrimos o motivo exato de você não emagrecer. Assista ao vídeo antes que ele seja removido.
+                    </p>
+                </div>
+
+                <div class="video-wrapper">
+                    <iframe id="panda-6677655e-afb8-4f41-88cd-a10db0796c2d"
+                        src="https://player-vz-41174eb7-d5d.tv.pandavideo.com.br/embed/?v=6677655e-afb8-4f41-88cd-a10db0796c2d"
+                        style="border:none; width: 100%; height: 100%; position: absolute; top:0; left: 0;"
+                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture" allowfullscreen=true
+                        fetchpriority="high"></iframe>
+                </div>
+
+                <!-- CTA BUTTON -->
+                <div id="cta-container" class="cta-box hidden" style="margin-top: 30px;">
+                    <a href="https://pay.kiwify.com.br/SEU-LINK" class="cta-button pulse"
+                        style="background: linear-gradient(to bottom, #16a34a, #15803d); box-shadow: 0 5px 0 #0f5e2d; border: 2px solid #4ade80;">
+                        QUERO DESBLOQUEAR MEU METABOLISMO POR R$ 19,90 <i class="fas fa-angle-double-right"></i>
+                    </a>
+
+                    <p class="security-text" style="color: #bbb;"><i class="fas fa-lock"></i> Desconto Válido Somente
+                        Hoje</p>
+
+                    <!-- SELOS DE SEGURANÇA E GARANTIA -->
+                    <div
+                        style="margin-top: 25px; background: #111; border: 1px solid #333; border-radius: 10px; padding: 20px;">
+
+                        <!-- GARANTIA -->
+                        <div
+                            style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #333;">
+                            <div
+                                style="background: #16a34a; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-shield-alt" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div style="text-align: left;">
+                                <strong style="color: #16a34a; font-size: 1.1rem;">GARANTIA DE 7 DIAS</strong>
+                                <p style="color: #aaa; font-size: 0.85rem; margin: 0;">Se não gostar, devolvemos 100% do
+                                    seu dinheiro. Sem perguntas.</p>
+                            </div>
+                        </div>
+
+                        <!-- FORMAS DE PAGAMENTO -->
+                        <div
+                            style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 15px;">
+                            <span
+                                style="background: #1a1f71; color: white; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">💳
+                                VISA</span>
+                            <span
+                                style="background: #eb001b; color: white; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">💳
+                                MASTERCARD</span>
+                            <span
+                                style="background: #32bcad; color: white; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">💳
+                                PIX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- AQUI ENTRA A GALERIA DE PROVA SOCIAL (MANTIDA) -->
+        <section class="transformation-gallery">
+            <h2 class="gallery-title">Resultados Verificados da Comunidade 💬</h2>
+            <div class="gallery-grid">
+                <!-- CARD 1 -->
+                <div class="gallery-card">
+                    <div class="card-header">
+                        <div class="user-avatar"
+                            style="background: #8b5cf6; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                            M</div>
+                        <div class="user-info"><strong>Mariana Costa <i
+                                    class="fas fa-check-circle verified-badge"></i></strong><span>3 horas atrás</span>
+                        </div>
+                    </div>
+                    <img src="prova1.png" alt="Antes e Depois - Barriga"
+                        style="width: 100%; height: auto; display: block;">
+                    <div class="card-footer">
+                        <p>"Minha barriga SUMIU em 15 dias! Meu marido não acreditou quando viu. Mounjatina é real!"</p>
+                    </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="gallery-card">
+                    <div class="card-header">
+                        <div class="user-avatar"
+                            style="background: #ff003c; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                            C</div>
+                        <div class="user-info"><strong>Carla Mendes <i
+                                    class="fas fa-check-circle verified-badge"></i></strong><span>1 hora atrás</span>
+                        </div>
+                    </div>
+                    <img src="prova2.png" alt="Antes e Depois - Rosto"
+                        style="width: 100%; height: auto; display: block;">
+                    <div class="card-footer">
+                        <p>"Olha a diferença no meu rosto! O inchaço sumiu totalmente. Parece outra pessoa."</p>
+                    </div>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="gallery-card">
+                    <div class="card-header">
+                        <div class="user-avatar"
+                            style="background: #16a34a; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                            P</div>
+                        <div class="user-info"><strong>Patricia Oliveira <i
+                                    class="fas fa-check-circle verified-badge"></i></strong><span>45 min atrás</span>
+                        </div>
+                    </div>
+                    <img src="prova3.png" alt="Antes e Depois - Vestido"
+                        style="width: 100%; height: auto; display: block;">
+                    <div class="card-footer">
+                        <p>"O vestido que não subia mais... agora está SOBRANDO! Perdi 8kg em 20 dias."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- SCRIPT.JS ATUALIZADO VAI AQUI PELO SRC -->
+    <script src="script.js"></script>
+
+    <!-- LÓGICA ESPECÍFICA DO QUIZ GAMEFICADO -->
+    <script>
+        // Funções específicas do Quiz 2.0 (Gamified)
+
+        let selectedZones = 0;
+
+        function toggleZone(element) {
+            element.classList.toggle('selected');
+            const isSelected = element.classList.contains('selected');
+
+            if (isSelected) selectedZones++;
+            else selectedZones--;
+
+            // Habilitar botão apenas se selecionar pelo menos 1
+            const btn = document.getElementById('btn-step-1');
+            if (selectedZones > 0) {
+                btn.disabled = false;
+                btn.classList.add('pulse');
+            } else {
+                btn.disabled = true;
+                btn.classList.remove('pulse');
+            }
+        }
+
+        function updateWeight(val) {
+            document.getElementById('weight-val').innerText = val;
+
+            // Simples lógica de "gamificação" para estimativa
+            let days = Math.round(val * 1.5);
+            if (days < 10) days = 10;
+            document.getElementById('time-estimate').innerText = `${days} a ${days + 5} Dias ⚡`;
+        }
+
+        function goToStep(step) {
+            // Esconder todos
+            document.getElementById('step-start').style.display = 'none';
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'none';
+            document.getElementById('step-3').style.display = 'none';
+
+            // Mostrar o atual
+            const target = document.getElementById('step-' + step);
+            if (target) target.style.display = 'block';
+
+            // Atualizar barra
+            const progress = document.getElementById('progress');
+            let pct = 0;
+            if (step === 1) pct = 25;
+            if (step === 2) pct = 50;
+            if (step === 3) pct = 75;
+            progress.style.width = pct + '%';
+        }
+
+        function startProcessing() {
+            goToStep('processing'); // Hack no nome do ID
+            document.getElementById('progress').style.width = '100%';
+
+            const terminal = document.getElementById('terminal-screen');
+            const messages = [
+                "Conectando ao banco de dados metabólico...",
+                "Analisando perfil hormonal...",
+                "[OK] Cortisol Base... Nível 4/10",
+                "[SCAN] Escaneando depósitos de gordura...",
+                "⚠️ ALERTA: Resistência periférica detectada!",
+                "⚠️ ALERTA: Células adiposas inflamadas.",
+                "<span class='log-error'>❌ BLOQUEIO METABÓLICO ENCONTRADO!</span>",
+                "Gerando plano de desbloqueio..."
+            ];
+
+            let i = 0;
+            function typeLine() {
+                if (i < messages.length) {
+                    const p = document.createElement('div');
+                    p.className = 'log-line';
+                    p.innerHTML = "> " + messages[i];
+                    terminal.appendChild(p);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    i++;
+
+                    // Tempo aleatório entre linhas para parecer processamento real
+                    setTimeout(typeLine, Math.floor(Math.random() * 800) + 300);
+                } else {
+                    // Fim do Loading
+                    setTimeout(() => {
+                        document.getElementById('quiz-wrapper').style.display = 'none';
+                        const vsl = document.getElementById('vsl-section');
+                        vsl.style.display = 'block';
+                        vsl.style.animation = "fadeIn 2s";
+                    }, 1500);
+                }
+            }
+
+            typeLine();
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Mounjatina</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            padding: 15px;
+            color: #e4e6eb;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #b0b3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border: 1px solid #ef4444;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .alert-banner i {
+            color: #ef4444;
+            font-size: 1.3rem;
+            margin-top: 2px;
+        }
+
+        .alert-banner .alert-content h3 {
+            color: #fca5a5;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .alert-banner .alert-content p {
+            color: #b0b3b8;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(36, 37, 38, 0.95);
+            border: 1px solid #3e4042;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #3e4042;
+        }
+
+        .card-header i {
+            font-size: 1.4rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Form Elements */
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #e4e6eb;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #3e4042;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #18191a;
+            color: #e4e6eb;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Time Input */
+        .time-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .time-row input {
+            width: 80px;
+            text-align: center;
+        }
+
+        .time-row span {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .time-display {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: rgba(22, 163, 74, 0.1);
+            border: 1px solid #16a34a;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .time-display strong {
+            color: #4ade80;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
+        }
+
+        /* Code Output */
+        .code-output {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .code-output.active {
+            display: block;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .code-header h3 {
+            color: #8b5cf6;
+            font-size: 1rem;
+        }
+
+        .code-box {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .code-box pre {
+            color: #4ade80;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+        }
+
+        /* Steps */
+        .steps {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 10px;
+        }
+
+        .steps h4 {
+            color: #93c5fd;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .steps ol {
+            padding-left: 20px;
+            color: #b0b3b8;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .steps ol li strong {
+            color: #fff;
+        }
+
+        /* Status Message */
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .status.success {
+            background: rgba(22, 163, 74, 0.2);
+            border: 1px solid #16a34a;
+            color: #4ade80;
+            display: block;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .quick-link {
+            padding: 12px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            color: #c4b5fd;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .quick-link:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .quick-link i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            body {
+                padding: 30px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .time-row input {
+                width: 100px;
+            }
+
+            .quick-links {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>⚙️ Painel Admin Central</h1>
+            <p>Configure uma vez, funciona em todos os dispositivos</p>
+        </div>
+
+        <!-- Alert -->
+        <div class="alert-banner">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <h3>Como funciona?</h3>
+                <p>Configure os valores abaixo, clique em "Gerar Código", copie o código gerado e substitua o conteúdo
+                    do arquivo <strong>config.js</strong>. Depois faça commit e push. Assim funciona em TODOS os
+                    dispositivos!</p>
+            </div>
+        </div>
+
+        <!-- TIMING CARD -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-clock" style="color: #f59e0b;"></i>
+                <h2>Timing do CTA (Botão de Compra)</h2>
+            </div>
+
+            <div class="input-group">
+                <label>⏱️ Quando o botão deve aparecer?</label>
+                <div class="time-row">
+                    <input type="number" id="ctaMin" min="0" max="59" value="2" placeholder="Min">
+                    <span>minutos</span>
+                    <input type="number" id="ctaSec" min="0" max="59" value="44" placeholder="Seg">
+                    <span>segundos</span>
+                </div>
+                <div class="time-display">
+                    Total: <strong id="totalTime">2 minutos e 44 segundos (164000ms)</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- LINKS CARD -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-link" style="color: #3b82f6;"></i>
+                <h2>Links de Checkout</h2>
+            </div>
+
+            <div class="input-group">
+                <label>Link Principal (Mounjatina)</label>
+                <input type="url" id="linkMain" placeholder="https://pay.kiwify.com.br/...">
+                <p class="help-text">Link de pagamento da oferta principal</p>
+            </div>
+
+            <div class="input-group">
+                <label>Link Upsell (Chá Detox)</label>
+                <input type="url" id="linkUpsell" placeholder="https://pay.kiwify.com.br/...">
+            </div>
+
+            <div class="input-group">
+                <label>Link Downsell</label>
+                <input type="url" id="linkDownsell" placeholder="https://pay.kiwify.com.br/...">
+            </div>
+
+            <div class="input-group">
+                <label>Link WhatsApp (Grupo VIP)</label>
+                <input type="url" id="linkWhatsapp" placeholder="https://chat.whatsapp.com/...">
+            </div>
+        </div>
+
+        <!-- VIDEO CARD -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-video" style="color: #8b5cf6;"></i>
+                <h2>Configuração do Vídeo</h2>
+            </div>
+
+            <div class="input-group">
+                <label>Código Embed do Vídeo (iframe)</label>
+                <textarea id="vslEmbed"
+                    placeholder='Cole aqui o código embed do YouTube/Vimeo/Panda&#10;Ex: <iframe src="..." ...></iframe>'></textarea>
+                <p class="help-text">Deixe vazio para usar o placeholder padrão</p>
+            </div>
+
+            <div class="input-group">
+                <label>Headline Personalizada (opcional)</label>
+                <input type="text" id="vslHeadline" placeholder="Ex: VAZOU: A Receita Secreta...">
+            </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <button class="btn btn-primary" onclick="generateCode()">
+            <i class="fas fa-code"></i> GERAR CÓDIGO DO CONFIG.JS
+        </button>
+
+        <!-- CODE OUTPUT -->
+        <div id="codeOutput" class="code-output">
+            <div class="card" style="border-color: #16a34a;">
+                <div class="code-header">
+                    <h3><i class="fas fa-file-code"></i> Código Gerado - config.js</h3>
+                </div>
+
+                <div class="code-box">
+                    <pre id="generatedCode"></pre>
+                </div>
+
+                <button class="btn btn-success" onclick="copyCode()">
+                    <i class="fas fa-copy"></i> COPIAR CÓDIGO
+                </button>
+
+                <div class="steps">
+                    <h4>📋 Próximos Passos:</h4>
+                    <ol>
+                        <li>Clique em <strong>"Copiar Código"</strong> acima</li>
+                        <li>Abra o arquivo <strong>config.js</strong> no seu editor</li>
+                        <li>Substitua TODO o conteúdo pelo código copiado</li>
+                        <li>Salve o arquivo</li>
+                        <li>Faça <strong>commit e push</strong> para o GitHub</li>
+                        <li>Pronto! Funciona em Desktop e Mobile! 🎉</li>
+                    </ol>
+                </div>
+
+                <div id="statusMsg" class="status"></div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <a href="quiz.html" target="_blank" class="quick-link">
+                <i class="fas fa-question-circle"></i>
+                Quiz
+            </a>
+            <a href="vsl.html" target="_blank" class="quick-link">
+                <i class="fas fa-play-circle"></i>
+                VSL
+            </a>
+            <a href="upsell.html" target="_blank" class="quick-link">
+                <i class="fas fa-arrow-up"></i>
+                Upsell
+            </a>
+            <a href="obrigado.html" target="_blank" class="quick-link">
+                <i class="fas fa-check-circle"></i>
+                Obrigado
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Update time display
+        function updateTimeDisplay() {
+            const min = parseInt(document.getElementById('ctaMin').value) || 0;
+            const sec = parseInt(document.getElementById('ctaSec').value) || 0;
+            const totalMs = ((min * 60) + sec) * 1000;
+            document.getElementById('totalTime').textContent =
+                `${min} minutos e ${sec} segundos (${totalMs}ms)`;
+        }
+
+        document.getElementById('ctaMin').addEventListener('input', updateTimeDisplay);
+        document.getElementById('ctaSec').addEventListener('input', updateTimeDisplay);
+
+        // Generate config.js code
+        function generateCode() {
+            const ctaMin = parseInt(document.getElementById('ctaMin').value) || 2;
+            const ctaSec = parseInt(document.getElementById('ctaSec').value) || 44;
+            const totalMs = ((ctaMin * 60) + ctaSec) * 1000;
+
+            const linkMain = document.getElementById('linkMain').value || 'https://pay.kiwify.com.br/SEU-LINK-PRINCIPAL';
+            const linkUpsell = document.getElementById('linkUpsell').value || 'https://pay.kiwify.com.br/SEU-LINK-UPSELL';
+            const linkDownsell = document.getElementById('linkDownsell').value || 'https://pay.kiwify.com.br/SEU-LINK-DOWNSELL';
+            const linkWhatsapp = document.getElementById('linkWhatsapp').value || 'https://chat.whatsapp.com/SEU-GRUPO';
+            const vslEmbed = document.getElementById('vslEmbed').value.replace(/'/g, "\\'").replace(/\n/g, '\\n') || '';
+            const vslHeadline = document.getElementById('vslHeadline').value.replace(/'/g, "\\'") || '';
+
+            const code = `/**
+ * =====================================================
+ * 🚀 CONFIGURAÇÃO GLOBAL DO FUNIL MOUNJATINA
+ * =====================================================
+ * 
+ * Gerado em: ${new Date().toLocaleString('pt-BR')}
+ * 
+ * ⚠️ ESTE ARQUIVO É A FONTE ÚNICA DE VERDADE!
+ * Funciona em TODOS os dispositivos (Desktop e Mobile)
+ */
+
+// =====================================================
+// ⏱️ TIMING DO CTA - ${ctaMin} MINUTOS E ${ctaSec} SEGUNDOS
+// =====================================================
+const CTA_DELAY_MINUTES = ${ctaMin};
+const CTA_DELAY_SECONDS = ${ctaSec};
+const CTA_DELAY_TOTAL_MS = ${totalMs}; // (${ctaMin}*60+${ctaSec})*1000
+
+// =====================================================
+// 🔗 LINKS DE CHECKOUT
+// =====================================================
+const FUNNEL_CONFIG = {
+    // ⏱️ Timing
+    ctaMin: CTA_DELAY_MINUTES,
+    ctaSec: CTA_DELAY_SECONDS,
+    ctaDelayMs: CTA_DELAY_TOTAL_MS,
+
+    // 📹 Vídeo
+    vslEmbed: '${vslEmbed}',
+    vslHeadline: '${vslHeadline}',
+
+    // 🔗 Links
+    linkMain: '${linkMain}',
+    linkUpsell: '${linkUpsell}',
+    linkDownsell: '${linkDownsell}',
+    linkWhatsapp: '${linkWhatsapp}'
+};
+
+// Função para obter config
+function getFunnelConfig() {
+    return FUNNEL_CONFIG;
+}
+
+// Exportar globalmente
+window.FUNNEL_CONFIG = FUNNEL_CONFIG;
+window.getFunnelConfig = getFunnelConfig;
+window.CTA_DELAY_MS = CTA_DELAY_TOTAL_MS;
+
+// Log de confirmação
+console.log('%c⏱️ TIMING DO CTA:', 'color: #ff003c; font-size: 14px; font-weight: bold;');
+console.log('%c   → ' + CTA_DELAY_MINUTES + ' minutos e ' + CTA_DELAY_SECONDS + ' segundos (' + CTA_DELAY_TOTAL_MS + 'ms)', 'color: #16a34a; font-weight: bold;');
+console.log('%c📱 Funciona em Desktop e Mobile!', 'color: #8b5cf6; font-weight: bold;');`;
+
+            document.getElementById('generatedCode').textContent = code;
+            document.getElementById('codeOutput').classList.add('active');
+
+            // Scroll to output
+            document.getElementById('codeOutput').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Copy code to clipboard
+        function copyCode() {
+            const code = document.getElementById('generatedCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const status = document.getElementById('statusMsg');
+                status.textContent = '✅ Código copiado! Agora cole no arquivo config.js';
+                status.classList.add('success');
+
+                setTimeout(() => {
+                    status.classList.remove('success');
+                }, 5000);
+            }).catch(err => {
+                alert('Erro ao copiar. Selecione o código manualmente.');
+            });
+        }
+
+        // Load saved values (for convenience)
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = JSON.parse(localStorage.getItem('adminConfig') || '{}');
+            if (saved.ctaMin) document.getElementById('ctaMin').value = saved.ctaMin;
+            if (saved.ctaSec) document.getElementById('ctaSec').value = saved.ctaSec;
+            if (saved.linkMain) document.getElementById('linkMain').value = saved.linkMain;
+            if (saved.linkUpsell) document.getElementById('linkUpsell').value = saved.linkUpsell;
+            if (saved.linkDownsell) document.getElementById('linkDownsell').value = saved.linkDownsell;
+            if (saved.linkWhatsapp) document.getElementById('linkWhatsapp').value = saved.linkWhatsapp;
+            if (saved.vslEmbed) document.getElementById('vslEmbed').value = saved.vslEmbed;
+            if (saved.vslHeadline) document.getElementById('vslHeadline').value = saved.vslHeadline;
+            updateTimeDisplay();
+        });
+
+        // Save values for convenience (local only)
+        setInterval(() => {
+            const config = {
+                ctaMin: document.getElementById('ctaMin').value,
+                ctaSec: document.getElementById('ctaSec').value,
+                linkMain: document.getElementById('linkMain').value,
+                linkUpsell: document.getElementById('linkUpsell').value,
+                linkDownsell: document.getElementById('linkDownsell').value,
+                linkWhatsapp: document.getElementById('linkWhatsapp').value,
+                vslEmbed: document.getElementById('vslEmbed').value,
+                vslHeadline: document.getElementById('vslHeadline').value
+            };
+            localStorage.setItem('adminConfig', JSON.stringify(config));
+        }, 2000);
+    </script>
+
+</body>
+
+</html>

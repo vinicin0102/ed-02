@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Última Chance...</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .upsell-card {
+            border: 2px solid #e5e7eb;
+            background: #fff;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 30px auto;
+            max-width: 700px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .price-strike {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            text-decoration: line-through;
+        }
+
+        .price-deal {
+            color: #16a34a;
+            font-size: 2rem;
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .btn-yes {
+            background: #16a34a;
+            /* Verde */
+            box-shadow: 0 4px 0 #15803d;
+            width: 100%;
+            display: block;
+            padding: 15px;
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .btn-yes:hover {
+            background: #15803d;
+        }
+
+        .btn-no {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body style="background-color: #f9fafb; padding-bottom: 50px;">
+
+    <!-- HEADER SIMPLES -->
+    <div style="background: white; padding: 20px; text-align: center; border-bottom: 1px solid #eee;">
+        <h1 style="color: #4b5563; font-size: 1.5rem;">Tudo bem, eu entendo...</h1>
+    </div>
+
+    <div class="container content-narrow">
+
+        <div class="upsell-card">
+            <h2 style="color: #1f2937; margin-bottom: 15px;">Mas n&atilde;o quero que voc&ecirc; fique desprotegida.
+            </h2>
+
+            <p style="text-align: left; margin-bottom: 15px;">
+                Talvez 3 potes seja muito agora, ou o valor tenha ficado pesado para voc&ecirc;. Eu entendo
+                perfeitamente.
+            </p>
+            <p style="text-align: left; margin-bottom: 20px;">
+                Mas eu n&atilde;o quero que voc&ecirc; corra o risco de ver resultados no primeiro m&ecirc;s e depois
+                ter que parar porque
+                o pote acabou.
+            </p>
+
+            <div
+                style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0; margin-bottom: 20px;">
+                <p style="color: #166534; font-weight: bold;">
+                    <i class="fas fa-gift"></i> VOU FAZER UMA LOUCURA PRA VOC&Ecirc; N&Atilde;O SAIR DE M&Atilde;OS
+                    VAZIAS:
+                </p>
+            </div>
+
+            <h3 style="color: #1f2937;">LEVE APENAS +1 POTE EXTRA ("POTE DA SEGURAN&Ccedil;A")</h3>
+            <p>Pague pre&ccedil;o de custo. Quase de gra&ccedil;a.</p>
+
+            <div class="price-deal">Apenas R$ 67,00</div>
+            <p style="margin-bottom: 30px; font-size: 0.9rem; color: #6b7280;">(Adicionado ao seu pedido atual)</p>
+
+            <!-- BOTÕES DE DECISÃO -->
+            <a href="obrigado.html" class="btn-yes">
+                SIM! ADICIONAR 1 POTE EXTRA POR R$ 67
+            </a>
+
+            <!-- AMBOS LEVAM PARA OBRIGADO AGORA -->
+            <a href="obrigado.html" class="btn-no">
+                N&atilde;o, obrigado. Vou ficar apenas com o pedido inicial.
+            </a>
+        </div>
+    </div>
+
+</body>
+
+</html>

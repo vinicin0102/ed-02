@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação de Potência Masculina</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .hidden-step {
+            display: none;
+        }
+
+        .next-btn {
+            background: linear-gradient(90deg, #b91c1c, #991b1b);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            margin-top: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(185, 28, 28, 0.4);
+            transition: 0.3s;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(185, 28, 28, 0.7);
+        }
+
+        .next-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.5;
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: #0f0;
+            box-shadow: 0 0 10px #0f0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: scanMove 2s infinite linear;
+        }
+
+        @keyframes scanMove {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .emoji-option {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- QUIZ WRAPPER -->
+    <div id="quiz-wrapper" class="quiz-container">
+
+        <!-- HEADER COM BARRA DE PROGRESSO -->
+        <div class="quiz-header">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="color: #666; font-size: 0.8rem;">SESSÃO: #ALPHA-MALE-01</span>
+                <span style="color: #0f0; font-size: 0.8rem;"><i class="fas fa-satellite-dish"></i> SEGURO &
+                    ANÔNIMO</span>
+            </div>
+            <div class="progress-container" style="background: #333; height: 8px; border-radius: 4px;">
+                <div id="progress" class="progress-bar"
+                    style="height: 100%; background: linear-gradient(90deg, #dc2626, #f59e0b); width: 0%; transition: width 0.5s;">
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 0: INICIAL (HOOK AGRESSIVO) -->
+        <div id="step-start" class="question-card" style="text-align: center;">
+            <div class="radar-scan"></div>
+            <h1 style="font-size: 1.8rem; color: white;">TESTE DE VITALIDADE MASCULINA</h1>
+            <p style="color: #aaa; margin: 15px 0;">Responda 7 perguntas rápidas para descobrir a causa da sua
+                <strong>FALHA NA HORA H</strong>.</p>
+            <p style="color: #dc2626; font-size: 0.9rem; margin-bottom: 20px;">⚠️ Atenção: Análise confidencial para
+                homens.</p>
+            <button class="next-btn pulse" onclick="goToStep(1)">INICIAR ANÁLISE ➤</button>
+        </div>
+
+        <!-- STEP 1: IDADE -->
+        <div id="step-1" class="question-card hidden-step">
+            <p class="question-text">PASSO 1/7: Qual sua idade?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(2)">18 a 29 anos</button>
+                <button class="option-btn" onclick="goToStep(2)">30 a 39 anos</button>
+                <button class="option-btn" onclick="goToStep(2)">40 a 49 anos (Queda de Testo)</button>
+                <button class="option-btn" onclick="goToStep(2)">50+ anos (Risco Elevado)</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: DUREZA (SEVERIDADE) -->
+        <div id="step-2" class="question-card hidden-step">
+            <p class="question-text">PASSO 2/7: Como você descreveria suas ereções recentemente?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(3)">🍌 100% Rígida (Rocha)</button>
+                <button class="option-btn" onclick="goToStep(3)">🥒 70% Rígida (Meia-bomba)</button>
+                <button class="option-btn" onclick="goToStep(3)">🌭 40% Rígida (Mole)</button>
+                <button class="option-btn" onclick="goToStep(3)">🥀 0% (Não sobe)</button>
+            </div>
+        </div>
+
+        <!-- STEP 3: TEMPO (EJACULAÇÃO) -->
+        <div id="step-3" class="question-card hidden-step">
+            <p class="question-text">PASSO 3/7: Quanto tempo você dura em média?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(4)">Menos de 2 minutos (Rápido demais)</button>
+                <button class="option-btn" onclick="goToStep(4)">Entre 2 a 5 minutos</button>
+                <button class="option-btn" onclick="goToStep(4)">Mais de 10 minutos</button>
+                <button class="option-btn" onclick="goToStep(4)">Quero durar a noite toda</button>
+            </div>
+        </div>
+
+        <!-- STEP 4: META -->
+        <div id="step-4" class="question-card hidden-step">
+            <p class="question-text">PASSO 4/7: Qual seu maior objetivo hoje?</p>
+            <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;">(Pode marcar mais de um)</p>
+
+            <div class="body-zones">
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-ruler-vertical"></i> <span>Aumentar Tamanho</span>
+                </div>
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-stopwatch"></i> <span>Durar Mais</span>
+                </div>
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-hammer"></i> <span>Ereção de Pedra</span>
+                </div>
+                <div class="zone-btn" onclick="toggleZone(this)">
+                    <i class="fas fa-fire"></i> <span>Libido Máxima</span>
+                </div>
+            </div>
+            <button id="btn-step-4" class="next-btn" disabled onclick="goToStep(5)">PRÓXIMO</button>
+        </div>
+
+        <!-- STEP 5: SINTOMAS -->
+        <div id="step-5" class="question-card hidden-step">
+            <p class="question-text">PASSO 5/7: Você sente algum desses sintomas?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(6)">Falta de energia / Cansaço</button>
+                <button class="option-btn" onclick="goToStep(6)">Vergonha da parceira</button>
+                <button class="option-btn" onclick="goToStep(6)">Perda de ereção durante o ato</button>
+                <button class="option-btn" onclick="goToStep(6)">TODOS ACIMA (Perigo ⚠️)</button>
+            </div>
+        </div>
+
+        <!-- STEP 6: PROMESSA AGRESSIVA -->
+        <div id="step-6" class="question-card hidden-step">
+            <p class="question-text">PASSO 6/7: Seja sincero...</p>
+            <h2 style="color: #dc2626; margin: 20px 0; font-size: 1.4rem;">Se você pudesse recuperar a <span
+                    style="background: yellow; color: black; padding: 0 5px;">VIRILIDADE DE 20 ANOS</span> em 7 dias...
+            </h2>
+            <p class="question-text">Você estaria disposto a tomar um simples tônico caseiro?</p>
+            <div class="options">
+                <button class="option-btn" style="border: 2px solid #bef264;" onclick="goToStep(7)">SIM! EU QUERO SALVAR
+                    MEU MASCULINO!</button>
+                <button class="option-btn" onclick="goToStep(7)">Talvez... sou cético.</button>
+            </div>
+        </div>
+
+        <!-- STEP 7: COMPROMISSO FINAL -->
+        <div id="step-7" class="question-card hidden-step">
+            <p class="question-text">PASSO 7/7: Última checagem.</p>
+            <p style="color: #ccc; margin-bottom: 20px;">Nosso sistema detectou que seu caso é
+                <strong>COMPATÍVEL</strong> com o <strong style="color: #f59e0b">Protocolo Alpha-X</strong>.</p>
+            <p class="question-text">Você se compromete a assistir ao vídeo explicativo até o final?</p>
+            <div class="options">
+                <button class="option-btn pulse" style="background: #16a34a; color: white; border: none;"
+                    onclick="goToStep(8)">SIM, EU ASSUMO O RISCO! ✋</button>
+                <button class="option-btn" onclick="goToStep(8)">Não tenho tempo...</button>
+            </div>
+        </div>
+
+        <!-- STEP 8: PROCESSAMENTO (TERMINAL FAKE) -->
+        <div id="step-8" class="question-card hidden-step"
+            style="position: relative; overflow: hidden; padding-top: 40px;">
+            <div class="scan-line"></div>
+            <div class="radar-scan" style="width: 80px; height: 80px; margin: 0 auto 20px auto;"></div>
+            <h2 style="color: #f59e0b; text-align: center;">ANALISANDO PERFIL...</h2>
+
+            <div id="terminal-screen" class="terminal-log">
+                <!-- Linhas inseridas via JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let selectedZones = 0;
+        const TOTAL_STEPS = 8;
+
+        function toggleZone(element) {
+            element.classList.toggle('selected');
+            selectedZones = element.classList.contains('selected') ? selectedZones + 1 : selectedZones - 1;
+
+            const btn = document.getElementById('btn-step-4');
+            if (selectedZones > 0) {
+                btn.disabled = false;
+                btn.classList.add('pulse');
+            } else {
+                btn.disabled = true;
+                btn.classList.remove('pulse');
+            }
+        }
+
+        function goToStep(step) {
+            // Esconder todos
+            document.getElementById('step-start').style.display = 'none';
+            for (let i = 1; i <= TOTAL_STEPS; i++) {
+                const el = document.getElementById('step-' + i);
+                if (el) el.style.display = 'none';
+            }
+
+            // Mostrar atual
+            const target = document.getElementById('step-' + step);
+            if (target) target.style.display = 'block';
+
+            // Barra progresso
+            const progress = document.getElementById('progress');
+            const pct = Math.round((step / TOTAL_STEPS) * 100);
+            progress.style.width = pct + '%';
+
+            // Se for o último step (processamento), iniciar
+            if (step === 8) {
+                startProcessing();
+            }
+        }
+
+        function startProcessing() {
+            const terminal = document.getElementById('terminal-screen');
+            terminal.innerHTML = ""; // Limpar
+            const messages = [
+                "Acessando banco de dados urológico...",
+                "Comparando com média nacional...",
+                "<span style='color: yellow'>⚠️ ALERTA: Bloqueio Vascular Detectado.</span>",
+                "Nível de Testosterona: BAIXO (Crítico)",
+                "Calculando potencial de recuperação...",
+                "--------------------------------",
+                "PREVISÃO DO PROTOCOLO:",
+                "Dia 1: Efeito Vaso-Dilatador",
+                "Dia 3: Ereções Matinais Retornam",
+                "Dia 7: Controle Total da Ejaculação",
+                "--------------------------------",
+                "<span style='color: #dc2626; font-weight: bold;'>❌ SOLUÇÃO URGENTE NECESSÁRIA!</span>",
+                "Liberando vídeo explicativo secreto...",
+                "<span style='color: #4ade80;'>✅ ACESSO CONCEDIDO!</span>"
+            ];
+
+            let i = 0;
+            function typeLine() {
+                if (i < messages.length) {
+                    const p = document.createElement('div');
+                    p.className = 'log-line';
+                    p.innerHTML = "> " + messages[i];
+                    terminal.appendChild(p);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    i++;
+                    setTimeout(typeLine, 600);
+                } else {
+                    setTimeout(() => {
+                        window.location.href = 'vsl.html';
+                    }, 2000);
+                }
+            }
+            typeLine();
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oferta Especial - Não feche essa página</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .warning-bar {
+            background-color: #dc2626;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            animation: flash 2s infinite;
+        }
+
+        @keyframes flash {
+
+            0%,
+            100% {
+                background-color: #dc2626;
+            }
+
+            50% {
+                background-color: #b91c1c;
+            }
+        }
+
+        .progress-bar-container {
+            background: #e5e7eb;
+            height: 10px;
+            width: 100%;
+        }
+
+        .progress-bar {
+            background: #16a34a;
+            height: 100%;
+            width: 75%;
+            /* 75% concluído */
+        }
+
+        .upsell-card {
+            border: 3px dashed #dc2626;
+            background: #fff;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-strike {
+            color: #9ca3af;
+            font-size: 1.2rem;
+            text-decoration: line-through;
+        }
+
+        .price-deal {
+            color: #16a34a;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 10px 0;
+        }
+
+        .btn-yes {
+            background: #16a34a;
+            /* Verde */
+            box-shadow: 0 5px 0 #15803d;
+            width: 100%;
+            display: block;
+            padding: 20px;
+            color: white;
+            font-weight: 900;
+            font-size: 1.3rem;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .btn-yes:hover {
+            background: #15803d;
+        }
+
+        .btn-yes:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #15803d;
+        }
+
+        .btn-no {
+            color: #6b7280;
+            text-decoration: underline;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .btn-no:hover {
+            color: #dc2626;
+        }
+
+        /* Mockup */
+        .combo-img {
+            background: #f3f4f6;
+            height: 200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            border-radius: 8px;
+            color: #9ca3af;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body style="background-color: #f3f4f6; padding-bottom: 50px;">
+
+    <!-- BARRA DE PROGRESSO -->
+    <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- HEADER FLASH -->
+    <div class="warning-bar">
+        🛑 ESPERE! SEU PEDIDO AINDA N&Atilde;O FOI FINALIZADO!
+    </div>
+
+    <div class="container content-narrow">
+        <div style="text-align: center; margin-top: 30px;">
+            <h1 style="color: #1f2937; margin-bottom: 10px;">Parab&eacute;ns! Seu primeiro pote est&aacute; reservado.
+            </h1>
+            <p style="font-size: 1.1rem; color: #4b5563;">Mas antes de enviarmos seu pacote, temos um alerta importante.
+            </p>
+        </div>
+
+        <div class="upsell-card">
+            <h2 style="color: #dc2626; margin-bottom: 15px;">N&Atilde;O CORRA O RISCO DE FICAR SEM!</h2>
+
+            <p style="text-align: left; margin-bottom: 15px;">
+                Muitas clientes veem resultados incr&iacute;veis nos primeiros 20 dias, mas depois ficam desesperadas
+                porque o
+                estoque acaba ou o pre&ccedil;o sobe.
+            </p>
+            <p style="text-align: left; margin-bottom: 20px;">
+                Voc&ecirc; n&atilde;o quer parar seu tratamento na metade e engordar tudo de novo, n&eacute;? Por isso,
+                como nova cliente
+                VIP, liberamos uma chance &uacute;nica:
+            </p>
+
+            <div class="combo-img">
+                IMAGEM DO PACOTE 3 POTES + B&Ocirc;NUS
+            </div>
+
+            <h3 style="color: #1f2937;">LEVE MAIS 3 POTES (Tratamento Completo 4 Meses)</h3>
+            <p style="color: #dc2626; font-weight: bold; margin-bottom: 15px;">70% DE DESCONTO IMEDIATO</p>
+
+            <div class="price-strike">De: R$ 891,00</div>
+            <div class="price-deal">Por: 12x de R$ 19,78</div>
+            <p style="margin-bottom: 30px;">(ou apenas R$ 197,00 &agrave; vista)</p>
+
+            <!-- BOTÕES DE DECISÃO -->
+            <a href="obrigado.html" class="btn-yes pulse">
+                <i class="fas fa-check-circle"></i> SIM! ADICIONAR AO MEU PEDIDO
+                <span style="display: block; font-size: 0.8rem; font-weight: normal; margin-top: 5px;">N&atilde;o
+                    &eacute; necess&aacute;rio
+                    digitar o cart&atilde;o novamente.</span>
+            </a>
+
+            <!-- O BOTÃO "NÃO" LEVA PARA O DOWNSELL -->
+            <a href="downsell.html" class="btn-no">
+                N&atilde;o, obrigado. Eu entendo que essa oferta nunca mais vai aparecer e aceito o risco de pagar o
+                dobro
+                depois.
+            </a>
+        </div>
+    </div>
+
+</body>
+
+</html>
