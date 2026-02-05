@@ -129,7 +129,119 @@ document.addEventListener('DOMContentLoaded', () => {
             // Scroll suave para o CTA
             // ctaContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Opcional, as vezes irrita o usuario
 
+            // Iniciar notificações de compra fake
+            startFakeNotifications();
+
         }, delayMs);
+    }
+
+    // ============================================
+    // 8. NOTIFICAÇÕES DE COMPRA (SOCIAL PROOF)
+    // ============================================
+    function startFakeNotifications() {
+        const names = [
+            'Pedro', 'João', 'Carlos', 'Marcos', 'Rafael', 'Lucas', 'Mateus', 'Gabriel',
+            'Felipe', 'André', 'Luiz', 'Gustavo', 'Rodrigo', 'Bruno', 'Daniel',
+            'Eduardo', 'Leonardo', 'Fernando', 'Ricardo', 'Marcelo', 'Antônio',
+            'Francisco', 'Paulo', 'Roberto', 'Sérgio', 'Alexandre', 'Diego',
+            'Fabiano', 'Cristiano', 'Anderson', 'Rogério', 'Vitor', 'Guilherme'
+        ];
+
+        const productName = "Segredo do Orgasmo";
+
+        // Criar container da notificação
+        const notification = document.createElement('div');
+        notification.id = 'fake-notification';
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #111;
+            border: 1px solid #333;
+            border-left: 4px solid #16a34a;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(-150%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Inter', sans-serif;
+            max-width: 90%;
+            width: 300px;
+        `;
+
+        // Ícone de check de compra verificada
+        const iconContainer = document.createElement('div');
+        iconContainer.style.cssText = `
+            background: #16a34a;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        `;
+        iconContainer.innerHTML = '<i class="fas fa-check" style="color: white; font-size: 1rem;"></i>';
+
+        // Conteúdo de texto
+        const textContent = document.createElement('div');
+        textContent.innerHTML = `
+            <p style="margin: 0; font-size: 0.9rem; font-weight: bold; color: #fff;" id="notif-name"></p>
+            <p style="margin: 2px 0 0; font-size: 0.75rem; color: #aaa;">Acabou de comprar <strong style="color: #4ade80;">"${productName}"</strong></p>
+            <p style="margin: 2px 0 0; font-size: 0.65rem; color: #666;">Há alguns segundos</p>
+        `;
+
+        notification.appendChild(iconContainer);
+        notification.appendChild(textContent);
+        document.body.appendChild(notification);
+
+        let lastIndex = -1;
+
+        const showNotification = () => {
+            // Escolher nome aleatório não repetido
+            let nameIndex;
+            do {
+                nameIndex = Math.floor(Math.random() * names.length);
+            } while (nameIndex === lastIndex);
+
+            lastIndex = nameIndex;
+            const name = names[nameIndex];
+
+            // Atualizar o nome
+            document.getElementById('notif-name').innerText = name;
+
+            // Mostrar notificação
+            // Verifica mobile para posicionamento
+            if (window.innerWidth < 768) {
+                notification.style.left = '50%';
+                notification.style.bottom = '10px';
+                notification.style.transform = 'translate(-50%, 0)'; // Slide in center bottom
+            } else {
+                notification.style.left = '20px';
+                notification.style.bottom = '20px';
+                notification.style.transform = 'translateX(0)'; // Slide in left
+            }
+
+            // Esconder após 4s
+            setTimeout(() => {
+                if (window.innerWidth < 768) {
+                    notification.style.transform = 'translate(-50%, 150%)';
+                } else {
+                    notification.style.transform = 'translateX(-150%)';
+                }
+            }, 4000);
+
+            // Agendar próxima (4s visivel + 3s intervalo = 7000ms)
+            setTimeout(showNotification, 7000);
+        };
+
+        // Começar notificações 2 segundos após a oferta aparecer
+        setTimeout(showNotification, 2000);
     }
 
     // ============================================
