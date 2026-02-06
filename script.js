@@ -144,10 +144,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'Felipe', 'André', 'Luiz', 'Gustavo', 'Rodrigo', 'Bruno', 'Daniel',
             'Eduardo', 'Leonardo', 'Fernando', 'Ricardo', 'Marcelo', 'Antônio',
             'Francisco', 'Paulo', 'Roberto', 'Sérgio', 'Alexandre', 'Diego',
-            'Fabiano', 'Cristiano', 'Anderson', 'Rogério', 'Vitor', 'Guilherme'
+            'Fabiano', 'Cristiano', 'Anderson', 'Rogério', 'Vitor', 'Guilherme',
+            'José', 'Julio', 'Sandro', 'Elton', 'Wellington', 'Tiago', 'Renato'
         ];
 
-        const productName = "Segredo do Orgasmo";
+        const actions = [
+            { msg: "Acabou de comprar", product: "Urotestom 3 Meses" },
+            { msg: "Adquiriu", product: "Urotestom 3 Meses" },
+            { msg: "Garantiu o tratamento de", product: "Urotestom 5 Meses" },
+            { msg: "Acabou de comprar o", product: "Urotestom 5 Meses" },
+            { msg: "Comprou o Kit de", product: "Urotestom 5 Meses" },
+            { msg: "Acabou de comprar", product: "Amostra Grátis Urotestom" },
+            { msg: "Garantiu sua", product: "Amostra Grátis Urotestom" },
+            { msg: "Pedido realizado:", product: "Amostra Grátis Urotestom" }
+        ];
 
         // Criar container da notificação
         const notification = document.createElement('div');
@@ -171,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: 'Inter', sans-serif;
             max-width: 90%;
-            width: 300px;
+            width: 310px;
         `;
 
         // Ícone de check de compra verificada
@@ -188,11 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         iconContainer.innerHTML = '<i class="fas fa-check" style="color: white; font-size: 1rem;"></i>';
 
-        // Conteúdo de texto
+        // Conteúdo de texto com ID para atualizar dinâmica
         const textContent = document.createElement('div');
         textContent.innerHTML = `
             <p style="margin: 0; font-size: 0.9rem; font-weight: bold; color: #fff;" id="notif-name"></p>
-            <p style="margin: 2px 0 0; font-size: 0.75rem; color: #aaa;">Acabou de comprar <strong style="color: #4ade80;">"${productName}"</strong></p>
+            <p style="margin: 2px 0 0; font-size: 0.75rem; color: #aaa;" id="notif-msg"></p>
             <p style="margin: 2px 0 0; font-size: 0.65rem; color: #666;">Há alguns segundos</p>
         `;
 
@@ -212,19 +222,22 @@ document.addEventListener('DOMContentLoaded', () => {
             lastIndex = nameIndex;
             const name = names[nameIndex];
 
-            // Atualizar o nome
+            // Escolher ação/produto aleatório
+            const action = actions[Math.floor(Math.random() * actions.length)];
+
+            // Atualizar o DOM
             document.getElementById('notif-name').innerText = name;
+            document.getElementById('notif-msg').innerHTML = `${action.msg} <strong style="color: #4ade80;">"${action.product}"</strong>`;
 
             // Mostrar notificação
-            // Verifica mobile para posicionamento
             if (window.innerWidth < 768) {
                 notification.style.left = '50%';
                 notification.style.bottom = '10px';
-                notification.style.transform = 'translate(-50%, 0)'; // Slide in center bottom
+                notification.style.transform = 'translate(-50%, 0)';
             } else {
                 notification.style.left = '20px';
                 notification.style.bottom = '20px';
-                notification.style.transform = 'translateX(0)'; // Slide in left
+                notification.style.transform = 'translateX(0)';
             }
 
             // Esconder após 4s
@@ -236,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 4000);
 
-            // Agendar próxima (4s visivel + 3s intervalo = 7000ms)
+            // Agendar próxima (4s + 3s intervalo)
             setTimeout(showNotification, 7000);
         };
 
