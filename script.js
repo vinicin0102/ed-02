@@ -83,9 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const socialProofSection = document.getElementById('social-proof-section');
 
     if (ctaContainer) {
-        // HARDCODED DELAY: 6 minutes and 33 seconds
+        // HARDCODED DELAY: EXACTLY 6 minutes
         const min = 6;
-        const sec = 33;
+        const sec = 0;
         const delayMs = ((min * 60) + sec) * 1000;
 
         console.log(`%c⏱️ Delay CTA e Provas Sociais INICIADO: ${delayMs}ms (${min}m ${sec}s)`, 'color: #16a34a; font-weight: bold;');
