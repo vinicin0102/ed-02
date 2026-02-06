@@ -296,6 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // 7. ANIMAÇÃO SUAVE DE FADE-IN
     // ============================================
+    // ============================================
+    // 7. ANIMAÇÃO SUAVE DE FADE-IN
+    // ============================================
     const style = document.createElement('style');
     style.textContent = `
         @keyframes fadeIn {
@@ -308,4 +311,117 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 
+});
+
+// ============================================
+// LOGICA DO POPUP DE ENDEREÇO (GLOBAL)
+// ============================================
+let currentCheckoutUrl = '';
+
+window.openAddressModal = function (url) {
+    currentCheckoutUrl = url;
+    const modal = document.getElementById('address-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Focar no primeiro campo
+        setTimeout(() => {
+            const cepInput = document.getElementById('cep');
+            if (cepInput) cepInput.focus();
+        }, 100);
+    }
+};
+
+window.closeAddressModal = function () {
+    const modal = document.getElementById('address-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+};
+
+window.submitShippingForm = function (event) {
+    event.preventDefault();
+
+    // Validar campos básicos
+    const cep = document.getElementById('cep').value;
+    const rua = document.getElementById('rua').value;
+    const numero = document.getElementById('numero').value;
+
+    if (!cep || !rua || !numero) {
+        alert('Por favor, preencha o endereço completo para entrega.');
+        return;
+    }
+
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn ? btn.innerText : 'IR PARA PAGAMENTO';
+
+    if (btn) {
+        btn.innerText = 'PROCESSANDO...';
+        btn.disabled = true;
+    }
+
+    // Simular processamento e redirecionar
+    setTimeout(() => {
+        if (currentCheckoutUrl) {
+            // Se possível, passar parametros na URL (opcional/avançado)
+            // Por enquanto, redirecionamento simples
+            window.location.href = currentCheckoutUrl;
+        } else {
+            console.error('URL de checkout não definida!');
+            alert('Erro ao processar. Tente novamente.');
+            if (btn) {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+    }, 1500);
+};
+
+// Auto-complete de CEP
+document.addEventListener('DOMContentLoaded', () => {
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
+        cepInput.addEventListener('blur', function () {
+            const cep = this.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                document.getElementById('rua').placeholder = 'Buscando...';
+
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('rua').value = data.logradouro;
+                            document.getElementById('bairro').value = data.bairro;
+                            document.getElementById('cidade').value = data.localidade;
+                            document.getElementById('uf').value = data.uf;
+
+                            // Focar no número
+                            document.getElementById('numero').focus();
+                        } else {
+                            alert('CEP não encontrado.');
+                            document.getElementById('rua').placeholder = 'Rua...';
+                        }
+                    })
+                    .catch(() => {
+                        console.log('Erro ao buscar CEP');
+                        document.getElementById('rua').placeholder = 'Rua...';
+                    });
+            }
+        });
+
+        // Máscara simples de CEP
+        cepInput.addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,5})(\d{0,3})/);
+            e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2];
+        });
+    }
+
+    // Fechar modal ao clicar fora
+    const modal = document.getElementById('address-modal');
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeAddressModal();
+            }
+        });
+    }
 });
