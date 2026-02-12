@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avaliação de Potência Masculina</title>
+    <title>Avaliação de Potência Masculina - Protocolo Alpha</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -67,6 +67,37 @@
             margin-bottom: 10px;
         }
     </style>
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '624262646647561');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=624262646647561&ev=PageView&noscript=1" /></noscript>
+
+    <!-- Utmify Pixel -->
+    <script>
+        window.pixelId = "69827519a16b83730140e6df";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
+
+    <!-- Utmify UTM Script -->
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck
+        data-utmify-prevent-subids async defer></script>
 </head>
 
 <body>
@@ -78,7 +109,8 @@
         <div class="quiz-header">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <span style="color: #666; font-size: 0.8rem;">SESSÃO: #ALPHA-MALE-01</span>
-                <span style="color: #0f0; font-size: 0.8rem;"><i class="fas fa-satellite-dish"></i> SEGURO & ANÔNIMO</span>
+                <span style="color: #0f0; font-size: 0.8rem;"><i class="fas fa-satellite-dish"></i> SEGURO &
+                    ANÔNIMO</span>
             </div>
             <div class="progress-container" style="background: #333; height: 8px; border-radius: 4px;">
                 <div id="progress" class="progress-bar"
@@ -91,107 +123,206 @@
         <div id="step-start" class="question-card" style="text-align: center;">
             <div class="radar-scan"></div>
             <h1 style="font-size: 1.8rem; color: white;">TESTE DE VITALIDADE MASCULINA</h1>
-            <p style="color: #aaa; margin: 15px 0;">Responda 7 perguntas rápidas para descobrir a causa da sua <strong>FALHA NA HORA H</strong>.</p>
-            <p style="color: #dc2626; font-size: 0.9rem; margin-bottom: 20px;">⚠️ Atenção: Análise confidencial para homens.</p>
+            <p style="color: #aaa; margin: 15px 0;">Responda a este questionário confidencial para descobrir a <strong
+                    style="color: #ef4444;">RAIZ OCULTA</strong> dos seus problemas de ereção e performance.</p>
+            <p style="color: #dc2626; font-size: 0.9rem; margin-bottom: 20px;">⚠️ Atenção: Análise baseada em
+                biomarcadores urológicos.</p>
             <button class="next-btn pulse" onclick="goToStep(1)">INICIAR ANÁLISE ➤</button>
         </div>
 
         <!-- STEP 1: IDADE -->
         <div id="step-1" class="question-card hidden-step">
-            <p class="question-text">PASSO 1/7: Qual sua idade?</p>
+            <p class="question-text">PERGUNTA 1/14: Qual sua idade?</p>
             <div class="options">
                 <button class="option-btn" onclick="goToStep(2)">18 a 29 anos</button>
                 <button class="option-btn" onclick="goToStep(2)">30 a 39 anos</button>
-                <button class="option-btn" onclick="goToStep(2)">40 a 49 anos (Queda de Testo)</button>
-                <button class="option-btn" onclick="goToStep(2)">50+ anos (Risco Elevado)</button>
+                <button class="option-btn" onclick="goToStep(2)">40 a 49 anos (Queda Hormonal)</button>
+                <button class="option-btn" onclick="goToStep(2)">50 a 59 anos</button>
+                <button class="option-btn" onclick="goToStep(2)">60+ anos (Risco Elevado)</button>
             </div>
         </div>
 
-        <!-- STEP 2: DUREZA (SEVERIDADE) -->
+        <!-- STEP 2: ESTADO CIVIL (NOVO) -->
         <div id="step-2" class="question-card hidden-step">
-            <p class="question-text">PASSO 2/7: Como você descreveria suas ereções recentemente?</p>
+            <p class="question-text">PERGUNTA 2/14: Qual seu estado civil atual?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(3)">🍌 100% Rígida (Rocha)</button>
-                <button class="option-btn" onclick="goToStep(3)">🥒 70% Rígida (Meia-bomba)</button>
-                <button class="option-btn" onclick="goToStep(3)">🌭 40% Rígida (Mole)</button>
-                <button class="option-btn" onclick="goToStep(3)">🥀 0% (Não sobe)</button>
+                <button class="option-btn" onclick="goToStep(3)">Solteiro (Vida sexual ativa)</button>
+                <button class="option-btn" onclick="goToStep(3)">Casado / Namorando</button>
+                <button class="option-btn" onclick="goToStep(3)">Divorciado / Viúvo recentemente</button>
+                <button class="option-btn" onclick="goToStep(3)">Solteiro (Sem parceira fixa)</button>
             </div>
         </div>
 
-        <!-- STEP 3: TEMPO (EJACULAÇÃO) -->
+        <!-- STEP 3: FREQUÊNCIA DE FALHA -->
         <div id="step-3" class="question-card hidden-step">
-            <p class="question-text">PASSO 3/7: Quanto tempo você dura em média?</p>
+            <p class="question-text">PERGUNTA 3/14: Com que frequência você sente que "falha" ou não performa como
+                gostaria?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(4)">Menos de 2 minutos (Rápido demais)</button>
-                <button class="option-btn" onclick="goToStep(4)">Entre 2 a 5 minutos</button>
-                <button class="option-btn" onclick="goToStep(4)">Mais de 10 minutos</button>
-                <button class="option-btn" onclick="goToStep(4)">Quero durar a noite toda</button>
+                <button class="option-btn" onclick="goToStep(4)">Raramente (Aconteceu 1 ou 2 vezes)</button>
+                <button class="option-btn" onclick="goToStep(4)">Às vezes (Quando estou estressado/cansado)</button>
+                <button class="option-btn" onclick="goToStep(4)">Frequentemente (50% das vezes)</button>
+                <button class="option-btn" onclick="goToStep(4)">Sempre (Não consigo ter relações)</button>
             </div>
         </div>
 
-        <!-- STEP 4: META -->
+        <!-- STEP 4: EREÇÕES MATINAIS -->
         <div id="step-4" class="question-card hidden-step">
-            <p class="question-text">PASSO 4/7: Qual seu maior objetivo hoje?</p>
-            <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;">(Pode marcar mais de um)</p>
+            <p class="question-text">PERGUNTA 4/14: Você costuma ter "ereções matinais" (acordar com o pênis ereto)?</p>
+            <p style="font-size: 0.85rem; color: #888; margin-bottom: 15px;">*Isso é um indicador crucial de saúde
+                vascular.</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(5)">Sim, quase todo dia.</button>
+                <button class="option-btn" onclick="goToStep(5)">Às vezes, mas não é tão firme.</button>
+                <button class="option-btn" onclick="goToStep(5)">Raramente / Quase nunca.</button>
+                <button class="option-btn" onclick="goToStep(5)">Não, nunca mais aconteceu.</button>
+            </div>
+        </div>
+
+        <!-- STEP 5: HARDNESS -->
+        <div id="step-5" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 5/14: Como você descreveria a qualidade da sua ereção hoje?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(6)">🍌 100% Rígida (Como uma rocha)</button>
+                <button class="option-btn" onclick="goToStep(6)">🥒 70% Rígida (Dá pra usar, mas perde força)</button>
+                <button class="option-btn" onclick="goToStep(6)">🌭 40% Rígida (Meia-bomba / Mole)</button>
+                <button class="option-btn" onclick="goToStep(6)">🥀 0% (Não sobe de jeito nenhum)</button>
+            </div>
+        </div>
+
+        <!-- STEP 6: CURVATURA (NOVO) -->
+        <div id="step-6" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 6/14: Você notou alguma curvatura ou dor durante a ereção?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(7)">Não, é reto e indolor.</button>
+                <button class="option-btn" onclick="goToStep(7)">Leve curvatura, sem dor.</button>
+                <button class="option-btn" onclick="goToStep(7)">Curvatura acentuada (Parece estar torto).</button>
+                <button class="option-btn" onclick="goToStep(7)">Sinto dor/desconforto quando fica ereto.</button>
+            </div>
+        </div>
+
+        <!-- STEP 7: PORNOGRAFIA -->
+        <div id="step-7" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 7/14: Seja honesto (confidencial): Com que frequência você consome
+                pornografia?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(8)">Várias vezes por semana / Diariamente</button>
+                <button class="option-btn" onclick="goToStep(8)">Eventualmente (1x por semana)</button>
+                <button class="option-btn" onclick="goToStep(8)">Raramente / Quase nunca</button>
+                <button class="option-btn" onclick="goToStep(8)">Nunca assisto.</button>
+            </div>
+        </div>
+
+        <!-- STEP 8: ESTIMULANTES -->
+        <div id="step-8" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 8/14: Você já precisou usar "pílulas azuis" ou estimulantes de farmácia?
+            </p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(9)">Sim, uso com frequência.</button>
+                <button class="option-btn" onclick="goToStep(9)">Sim, tentei mas me deu efeitos colaterais.</button>
+                <button class="option-btn" onclick="goToStep(9)">Sim, mas parou de funcionar.</button>
+                <button class="option-btn" onclick="goToStep(9)">Não, nunca usei e tenho medo/vergonha.</button>
+            </div>
+        </div>
+
+        <!-- STEP 9: DURAÇÃO -->
+        <div id="step-9" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 9/14: Quando consegue o ato, quanto tempo você dura em média?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(10)">Menos de 2 minutos (Ejaculação Precoce)</button>
+                <button class="option-btn" onclick="goToStep(10)">Entre 2 a 5 minutos (Rápido)</button>
+                <button class="option-btn" onclick="goToStep(10)">Mais de 10 minutos (Normal)</button>
+                <button class="option-btn" onclick="goToStep(10)">Demoro muito / Difícil gozar</button>
+            </div>
+        </div>
+
+        <!-- STEP 10: TAMANHO/INSEGURANÇA (NOVO) -->
+        <div id="step-10" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 10/14: Como você se sente em relação ao TAMANHO do seu membro?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(11)">Satisfeito / Sem problemas.</button>
+                <button class="option-btn" onclick="goToStep(11)">Gostaria de ganhar +1 a 2cm.</button>
+                <button class="option-btn" onclick="goToStep(11)">Inseguro. Queria ganhar +3cm ou mais.</button>
+                <button class="option-btn" onclick="goToStep(11)">Tenho vergonha (Micropênis).</button>
+            </div>
+        </div>
+
+        <!-- STEP 11: SAÚDE PRÓSTATA/URINÁRIA (NOVO) -->
+        <div id="step-11" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 11/14: Sobre sua rotina urinária:</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(12)">Normal, jato forte e sem dor.</button>
+                <button class="option-btn" onclick="goToStep(12)">Acordo à noite para urinar (1 ou mais vezes).</button>
+                <button class="option-btn" onclick="goToStep(12)">Sinto que não esvazio a bexiga toda.</button>
+                <button class="option-btn" onclick="goToStep(12)">Jato fraco / Pinga-pinga.</button>
+            </div>
+        </div>
+
+        <!-- STEP 12: IMPACTO NA PARCEIRA -->
+        <div id="step-12" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 12/14: Como isso tem afetado seu relacionamento?</p>
+            <div class="options">
+                <button class="option-btn" onclick="goToStep(13)">Ela reclama ou sinto que está decepcionada.</button>
+                <button class="option-btn" onclick="goToStep(13)">Eu evito o sexo por medo de falhar.</button>
+                <button class="option-btn" onclick="goToStep(13)">Ela diz que "está tudo bem", mas sei que não
+                    está.</button>
+                <button class="option-btn" onclick="goToStep(13)">Não estou em um relacionamento no momento.</button>
+            </div>
+        </div>
+
+        <!-- STEP 13: META (ZONAS) -->
+        <div id="step-13" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 13/14: Se você pudesse resolver UM problema hoje, qual seria?</p>
+            <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;">(Selecione quantos quiser)</p>
 
             <div class="body-zones">
                 <div class="zone-btn" onclick="toggleZone(this)">
                     <i class="fas fa-ruler-vertical"></i> <span>Aumentar Tamanho</span>
                 </div>
                 <div class="zone-btn" onclick="toggleZone(this)">
-                    <i class="fas fa-stopwatch"></i> <span>Durar Mais</span>
+                    <i class="fas fa-hammer"></i> <span>Ereção de Aço</span>
                 </div>
                 <div class="zone-btn" onclick="toggleZone(this)">
-                    <i class="fas fa-hammer"></i> <span>Ereção de Pedra</span>
+                    <i class="fas fa-stopwatch"></i> <span>Fim da Ejaculação Precoce</span>
                 </div>
                 <div class="zone-btn" onclick="toggleZone(this)">
-                    <i class="fas fa-fire"></i> <span>Libido Máxima</span>
+                    <i class="fas fa-fire"></i> <span>Libido de 20 Anos</span>
                 </div>
             </div>
-            <button id="btn-step-4" class="next-btn" disabled onclick="goToStep(5)">PRÓXIMO</button>
+            <button id="btn-step-13" class="next-btn" disabled onclick="goToStep(14)">PRÓXIMO</button>
         </div>
 
-        <!-- STEP 5: SINTOMAS -->
-        <div id="step-5" class="question-card hidden-step">
-            <p class="question-text">PASSO 5/7: Você sente algum desses sintomas?</p>
+        <!-- STEP 14: SINTOMAS FINAIS -->
+        <div id="step-14" class="question-card hidden-step">
+            <p class="question-text">PERGUNTA 14/14: Além da parte sexual, você sente:</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(6)">Falta de energia / Cansaço</button>
-                <button class="option-btn" onclick="goToStep(6)">Vergonha da parceira</button>
-                <button class="option-btn" onclick="goToStep(6)">Perda de ereção durante o ato</button>
-                <button class="option-btn" onclick="goToStep(6)">TODOS ACIMA (Perigo ⚠️)</button>
+                <button class="option-btn" onclick="goToStep(15)">Cansaço excessivo / Falta de energia</button>
+                <button class="option-btn" onclick="goToStep(15)">Gordura abdominal acumulada</button>
+                <button class="option-btn" onclick="goToStep(15)">Falta de foco / Irritabilidade</button>
+                <button class="option-btn" onclick="goToStep(15)">TODOS OS SINTOMAS ACIMA</button>
             </div>
         </div>
 
-        <!-- STEP 6: PROMESSA AGRESSIVA -->
-        <div id="step-6" class="question-card hidden-step">
-            <p class="question-text">PASSO 6/7: Seja sincero...</p>
-            <h2 style="color: #dc2626; margin: 20px 0; font-size: 1.4rem;">Se você pudesse recuperar a <span
-                    style="background: yellow; color: black; padding: 0 5px;">VIRILIDADE DE 20 ANOS</span> em 7 dias...</h2>
-            <p class="question-text">Você estaria disposto a tomar um simples tônico caseiro?</p>
+        <!-- STEP 15: COMPROMISSO FINAL -->
+        <div id="step-15" class="question-card hidden-step">
+            <p class="question-text">ANÁLISE CONCLUÍDA.</p>
+            <p style="color: #ccc; margin-bottom: 20px;">Nosso sistema identificou um <strong
+                    style="color: #ef4444;">BLOQUEIO VASCULAR</strong> severo no seu perfil.</p>
+            <p class="question-text">Existe uma solução natural, mas você precisa se comprometer a seguir o protocolo.
+                Você aceita?</p>
             <div class="options">
-                <button class="option-btn" style="border: 2px solid #bef264;" onclick="goToStep(7)">SIM! EU QUERO SALVAR MEU MASCULINO!</button>
-                <button class="option-btn" onclick="goToStep(7)">Talvez... sou cético.</button>
+                <button class="option-btn pulse"
+                    style="background: #16a34a; color: white; border: none; font-weight: 900;"
+                    onclick="goToStep(16)">SIM! QUERO RECUPERAR MINHA MASCULINIDADE!</button>
+                <button class="option-btn" onclick="goToStep(16)">Não, prefiro continuar falhando.</button>
             </div>
         </div>
 
-        <!-- STEP 7: COMPROMISSO FINAL -->
-        <div id="step-7" class="question-card hidden-step">
-            <p class="question-text">PASSO 7/7: Última checagem.</p>
-            <p style="color: #ccc; margin-bottom: 20px;">Nosso sistema detectou que seu caso é <strong>COMPATÍVEL</strong> com o <strong style="color: #f59e0b">Protocolo Alpha-X</strong>.</p>
-            <p class="question-text">Você se compromete a assistir ao vídeo explicativo até o final?</p>
-            <div class="options">
-                <button class="option-btn pulse" style="background: #16a34a; color: white; border: none;"
-                    onclick="goToStep(8)">SIM, EU ASSUMO O RISCO! ✋</button>
-                <button class="option-btn" onclick="goToStep(8)">Não tenho tempo...</button>
-            </div>
-        </div>
-
-        <!-- STEP 8: PROCESSAMENTO (TERMINAL FAKE) -->
-        <div id="step-8" class="question-card hidden-step"
+        <!-- STEP 16: PROCESSAMENTO (TERMINAL FAKE) -->
+        <div id="step-16" class="question-card hidden-step"
             style="position: relative; overflow: hidden; padding-top: 40px;">
             <div class="scan-line"></div>
             <div class="radar-scan" style="width: 80px; height: 80px; margin: 0 auto 20px auto;"></div>
-            <h2 style="color: #f59e0b; text-align: center;">ANALISANDO PERFIL...</h2>
+            <h2 style="color: #f59e0b; text-align: center;">GERANDO PROTOCOLO...</h2>
 
             <div id="terminal-screen" class="terminal-log">
                 <!-- Linhas inseridas via JS -->
@@ -202,13 +333,13 @@
 
     <script>
         let selectedZones = 0;
-        const TOTAL_STEPS = 8;
+        const TOTAL_STEPS = 16;
 
         function toggleZone(element) {
             element.classList.toggle('selected');
             selectedZones = element.classList.contains('selected') ? selectedZones + 1 : selectedZones - 1;
 
-            const btn = document.getElementById('btn-step-4');
+            const btn = document.getElementById('btn-step-13');
             if (selectedZones > 0) {
                 btn.disabled = false;
                 btn.classList.add('pulse');
@@ -232,11 +363,17 @@
 
             // Barra progresso
             const progress = document.getElementById('progress');
-            const pct = Math.round((step / TOTAL_STEPS) * 100);
+            // Calcula progresso base 14 perguntas (passo 15+ é final)
+            // Se step > 14 (compromisso/processamento), barra cheia.
+            const questionsTotal = 14;
+            let currentQ = step - 1; // step 1 = pergunta 1
+            if (currentQ > questionsTotal) currentQ = questionsTotal;
+
+            const pct = Math.min(100, Math.round((currentQ / questionsTotal) * 100));
             progress.style.width = pct + '%';
 
             // Se for o último step (processamento), iniciar
-            if (step === 8) {
+            if (step === 16) {
                 startProcessing();
             }
         }
@@ -245,20 +382,19 @@
             const terminal = document.getElementById('terminal-screen');
             terminal.innerHTML = ""; // Limpar
             const messages = [
-                "Acessando banco de dados urológico...",
-                "Comparando com média nacional...",
-                "<span style='color: yellow'>⚠️ ALERTA: Bloqueio Vascular Detectado.</span>",
-                "Nível de Testosterona: BAIXO (Crítico)",
-                "Calculando potencial de recuperação...",
+                "Compilando respostas...",
+                "Analisando perfil hormonal...",
+                "<span style='color: yellow'>⚠️ ALERTA: Deficiência de Testosterona Detectada.</span>",
+                "Verificando fluxo sanguíneo cavernoso...",
+                "Status: <span style='color: #dc2626'>OBSTRUÍDO</span>",
                 "--------------------------------",
-                "PREVISÃO DO PROTOCOLO:",
-                "Dia 1: Efeito Vaso-Dilatador",
-                "Dia 3: Ereções Matinais Retornam",
-                "Dia 7: Controle Total da Ejaculação",
+                "IDENTIFICANDO SOLUÇÃO:",
+                "Buscando compostos naturais...",
+                "Honey Booster: COMPATÍVEL ✅",
+                "Potencial de Recuperação: 98.7%",
                 "--------------------------------",
-                "<span style='color: #dc2626; font-weight: bold;'>❌ SOLUÇÃO URGENTE NECESSÁRIA!</span>",
-                "Liberando vídeo explicativo secreto...",
-                "<span style='color: #4ade80;'>✅ ACESSO CONCEDIDO!</span>"
+                "Preparando vídeo explicativo...",
+                "<span style='color: #4ade80;'>✅ ACESSO LIBERADO!</span>"
             ];
 
             let i = 0;
@@ -270,11 +406,11 @@
                     terminal.appendChild(p);
                     terminal.scrollTop = terminal.scrollHeight;
                     i++;
-                    setTimeout(typeLine, 600);
+                    setTimeout(typeLine, 500);
                 } else {
                     setTimeout(() => {
                         window.location.href = 'vsl.html';
-                    }, 2000);
+                    }, 1500);
                 }
             }
             typeLine();
