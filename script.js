@@ -149,14 +149,14 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         const actions = [
-            { msg: "Acabou de comprar", product: "Urotestom 3 Meses" },
-            { msg: "Adquiriu", product: "Urotestom 3 Meses" },
-            { msg: "Garantiu o tratamento de", product: "Urotestom 5 Meses" },
-            { msg: "Acabou de comprar o", product: "Urotestom 5 Meses" },
-            { msg: "Comprou o Kit de", product: "Urotestom 5 Meses" },
-            { msg: "Acabou de comprar", product: "Amostra Grátis Urotestom" },
-            { msg: "Garantiu sua", product: "Amostra Grátis Urotestom" },
-            { msg: "Pedido realizado:", product: "Amostra Grátis Urotestom" }
+            { msg: "Acabou de comprar", product: "HONEY BOOSTER 1 Pote" },
+            { msg: "Adquiriu", product: "HONEY BOOSTER 3 Potes" },
+            { msg: "Garantiu o tratamento de", product: "HONEY BOOSTER 5 Potes" },
+            { msg: "Acabou de comprar o", product: "HONEY BOOSTER 10 Potes" },
+            { msg: "Comprou o Kit de", product: "HONEY BOOSTER 5 Potes" },
+            { msg: "Acabou de comprar", product: "HONEY BOOSTER 3 Potes" },
+            { msg: "Garantiu sua", product: "HONEY BOOSTER 10 Potes" },
+            { msg: "Pedido realizado:", product: "HONEY BOOSTER 1 Pote" }
         ];
 
         // Criar container da notificação
