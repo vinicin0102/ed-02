@@ -460,8 +460,20 @@
             margin: 0 auto;
         }
     </style>
-</head>
-
+    <link rel="preload"
+        href="https://scripts.converteai.net/e6498671-4054-4f88-a3da-e606dc0c11ee/players/6993569fceb26906d00cdb15/v4/embed.html">
+    <script>!function (i, n) { i._plt = i._plt || (n && n.timeOrigin ? n.timeOrigin + n.now() : Date.now()) }(window, performance);</script>
+    <link rel="preload"
+        href="https://scripts.converteai.net/e6498671-4054-4f88-a3da-e606dc0c11ee/players/6993569fceb26906d00cdb15/v4/player.js"
+        as="script">
+    <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+    <link rel="preload"
+        href="https://cdn.converteai.net/e6498671-4054-4f88-a3da-e606dc0c11ee/6993559a7a04c8d380dde87d/main.m3u8"
+        as="fetch">
+    <link rel="dns-prefetch" href="https://cdn.converteai.net">
+    <link rel="dns-prefetch" href="https://scripts.converteai.net">
+    <link rel="dns-prefetch" href="https://images.converteai.net">
+    <link rel="dns-prefetch" href="https://api.vturb.com.br">
 </head>
 
 <body style="background-color: #050505; color: white;">
@@ -488,11 +500,13 @@
 
             <!-- VIDEO CONTAINER RESPONSIVO -->
             <div class="video-container video-wrapper" id="video-wrapper">
-                <iframe id="panda-a1ed689a-9040-4498-86f0-49f3cc6d8f20"
-                    src="https://player-vz-41174eb7-d5d.tv.pandavideo.com.br/embed/?v=a1ed689a-9040-4498-86f0-49f3cc6d8f20"
-                    style="border:none; width: 100%; height: 100%; position: absolute; top:0; left: 0;"
-                    allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture" allowfullscreen=true
-                    fetchpriority="high"></iframe>
+                <vturb-smartplayer id="vid-6993569fceb26906d00cdb15"
+                    style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer>
+                <script type="text/javascript">
+                    var s = document.createElement("script");
+                    s.src = "https://scripts.converteai.net/e6498671-4054-4f88-a3da-e606dc0c11ee/players/6993569fceb26906d00cdb15/v4/player.js",
+                        s.async = !0, document.head.appendChild(s);
+                </script>
             </div>
 
             <!-- CTA AREA (PREÇOS) -->

@@ -77,15 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================
-    // 2. DELAY DO BOTÃO CTA (Hardcoded: 6min 33s)
+    // 2. DELAY DO BOTÃO CTA (Hardcoded: 23min 00s)
     // ============================================
     const ctaContainer = document.getElementById('cta-container');
     const socialProofSection = document.getElementById('social-proof-section');
 
     if (ctaContainer) {
-        // HARDCODED DELAY: EXACTLY 6 minutes and 50 seconds
-        const min = 6;
-        const sec = 50;
+        // HARDCODED DELAY: EXACTLY 23 minutes and 00 seconds
+        const min = 23;
+        const sec = 0;
         const delayMs = ((min * 60) + sec) * 1000;
 
         console.log(`%c⏱️ Delay CTA e Provas Sociais INICIADO: ${delayMs}ms (${min}m ${sec}s)`, 'color: #16a34a; font-weight: bold;');
