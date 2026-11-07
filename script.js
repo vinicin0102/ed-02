@@ -77,15 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================
-    // 2. DELAY DO BOTÃO CTA (Hardcoded: 23min 00s)
+    // 2. DELAY DO BOTÃO CTA (Hardcoded: 22min 02s)
     // ============================================
     const ctaContainer = document.getElementById('cta-container');
     const socialProofSection = document.getElementById('social-proof-section');
 
     if (ctaContainer) {
-        // HARDCODED DELAY: EXACTLY 23 minutes and 00 seconds
-        const min = 23;
-        const sec = 0;
+        // HARDCODED DELAY: EXACTLY 22 minutes and 02 seconds
+        const min = 22;
+        const sec = 2;
         const delayMs = ((min * 60) + sec) * 1000;
 
         console.log(`%c⏱️ Delay CTA e Provas Sociais INICIADO: ${delayMs}ms (${min}m ${sec}s)`, 'color: #16a34a; font-weight: bold;');
@@ -314,19 +314,68 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// LOGICA DO POPUP DE ENDEREÇO (GLOBAL)
+// PLANOS E POPUP DE ENDEREÇO (GLOBAL)
 // ============================================
+// O pedido e criado pelo backend (POST /api/checkout), porque a chave
+// da Zuucky nao pode ficar no front-end. Veja server.js.
+
+const PLANOS = {
+    amostra: {
+        id: 'amostra',
+        nome: 'Amostra Grátis (você paga só o frete)',
+        valor: 22.90
+    },
+    kit4: {
+        id: 'kit4',
+        nome: 'Kit 4 Meses',
+        valor: 47.80
+    }
+};
+
+let planoSelecionado = null;
 let currentCheckoutUrl = '';
 
-window.openAddressModal = function (url) {
-    currentCheckoutUrl = url;
+function formatarBRL(valor) {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function apenasDigitos(valor) {
+    return String(valor || '').replace(/[^0-9]/g, '');
+}
+
+function mostrarErroCheckout(msg) {
+    const el = document.getElementById('checkout-erro');
+    if (!el) {
+        alert(msg);
+        return;
+    }
+    el.textContent = msg;
+    el.style.display = 'block';
+}
+
+// Aceita o id de um plano ('amostra' / 'kit4') ou, por compatibilidade,
+// uma URL de checkout direta.
+window.openAddressModal = function (planoOuUrl) {
+    planoSelecionado = PLANOS[planoOuUrl] || null;
+    currentCheckoutUrl = planoSelecionado ? '' : (planoOuUrl || '');
+
+    const nomeEl = document.getElementById('plano-nome');
+    const valorEl = document.getElementById('plano-valor');
+    if (nomeEl && valorEl) {
+        nomeEl.textContent = planoSelecionado ? planoSelecionado.nome : 'Pedido';
+        valorEl.textContent = planoSelecionado ? formatarBRL(planoSelecionado.valor) : '';
+    }
+
+    const erroEl = document.getElementById('checkout-erro');
+    if (erroEl) erroEl.style.display = 'none';
+
     const modal = document.getElementById('address-modal');
     if (modal) {
         modal.style.display = 'flex';
         // Focar no primeiro campo
         setTimeout(() => {
-            const cepInput = document.getElementById('cep');
-            if (cepInput) cepInput.focus();
+            const primeiro = document.getElementById('nome') || document.getElementById('cep');
+            if (primeiro) primeiro.focus();
         }, 100);
     }
 };
@@ -338,42 +387,82 @@ window.closeAddressModal = function () {
     }
 };
 
-window.submitShippingForm = function (event) {
+window.submitShippingForm = async function (event) {
     event.preventDefault();
 
-    // Validar campos básicos
-    const cep = document.getElementById('cep').value;
-    const rua = document.getElementById('rua').value;
-    const numero = document.getElementById('numero').value;
-
-    if (!cep || !rua || !numero) {
-        alert('Por favor, preencha o endereço completo para entrega.');
-        return;
-    }
-
     const btn = event.target.querySelector('button[type="submit"]');
-    const originalText = btn ? btn.innerText : 'IR PARA PAGAMENTO';
+    const textoOriginal = btn ? btn.innerText : 'IR PARA PAGAMENTO';
+    const valorDe = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+    };
+
+    const erroEl = document.getElementById('checkout-erro');
+    if (erroEl) erroEl.style.display = 'none';
 
     if (btn) {
         btn.innerText = 'PROCESSANDO...';
         btn.disabled = true;
     }
 
-    // Simular processamento e redirecionar
-    setTimeout(() => {
+    const restaurarBotao = () => {
+        if (btn) {
+            btn.innerText = textoOriginal;
+            btn.disabled = false;
+        }
+    };
+
+    // Compatibilidade: se veio uma URL direta, mantem o comportamento antigo
+    if (!planoSelecionado) {
         if (currentCheckoutUrl) {
-            // Se possível, passar parametros na URL (opcional/avançado)
-            // Por enquanto, redirecionamento simples
             window.location.href = currentCheckoutUrl;
         } else {
-            console.error('URL de checkout não definida!');
-            alert('Erro ao processar. Tente novamente.');
-            if (btn) {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
+            console.error('Nenhum plano selecionado.');
+            mostrarErroCheckout('Erro ao processar. Tente novamente.');
+            restaurarBotao();
         }
-    }, 1500);
+        return;
+    }
+
+    const pedido = {
+        plano: planoSelecionado.id,
+        cliente: {
+            nome: valorDe('nome'),
+            email: valorDe('email'),
+            cpf: apenasDigitos(valorDe('cpf')),
+            telefone: apenasDigitos(valorDe('telefone'))
+        },
+        endereco: {
+            cep: apenasDigitos(valorDe('cep')),
+            rua: valorDe('rua'),
+            numero: valorDe('numero'),
+            bairro: valorDe('bairro'),
+            cidade: valorDe('cidade'),
+            uf: valorDe('uf').toUpperCase()
+        }
+    };
+
+    try {
+        const resposta = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(pedido)
+        });
+
+        const dados = await resposta.json().catch(() => ({}));
+
+        if (resposta.ok && dados.checkoutUrl) {
+            window.location.href = dados.checkoutUrl;
+            return;
+        }
+
+        mostrarErroCheckout(dados.erro || 'Não foi possível abrir o pagamento. Tente novamente.');
+    } catch (err) {
+        console.error('[checkout]', err);
+        mostrarErroCheckout('Falha de conexão ao abrir o pagamento. Verifique sua internet e tente de novo.');
+    }
+
+    restaurarBotao();
 };
 
 // Auto-complete de CEP
