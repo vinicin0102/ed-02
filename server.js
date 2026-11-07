@@ -189,6 +189,29 @@ async function consultarStatus(req, res, query) {
     }
 }
 
+/* =====================================================
+ * GET /api/diagnostico - o que ainda falta configurar
+ * =====================================================
+ * Nao devolve nenhum segredo: so diz se cada variavel existe. */
+function diagnostico(res) {
+    const tem = (nome) => Boolean(process.env[nome]);
+    const faltando = [];
+
+    if (!tem('ZUCKPAY_CLIENT_ID') && !tem('CLIENT_ID')) faltando.push('ZUCKPAY_CLIENT_ID');
+    if (!tem('ZUCKPAY_CLIENT_SECRET') && !tem('CLIENT_SECRET')) faltando.push('ZUCKPAY_CLIENT_SECRET');
+
+    responderJson(res, 200, {
+        pixPronto: faltando.length === 0,
+        faltando,
+        baseUrl: process.env.ZUCKPAY_BASE_URL || 'https://www.zuckpay.com.br/conta (padrao)',
+        webhook: process.env.ZUCKPAY_WEBHOOK_URL || 'nao configurado (a pagina consulta o status mesmo assim)',
+        planos: Object.keys(PLANOS).map((id) => ({ id, valorCentavos: PLANOS[id].valorCentavos })),
+        comoResolver: faltando.length
+            ? 'Preencha o .env (veja .env.example) e suba com: node --env-file=.env server.js'
+            : 'Tudo configurado.'
+    });
+}
+
 const server = http.createServer((req, res) => {
     const partes = req.url.split('?');
     const cleanUrl = decodeURIComponent(partes[0]);
@@ -200,6 +223,11 @@ const server = http.createServer((req, res) => {
             return;
         }
         criarCheckout(req, res);
+        return;
+    }
+
+    if (cleanUrl === '/api/diagnostico') {
+        diagnostico(res);
         return;
     }
 
