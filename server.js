@@ -2,14 +2,20 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const port = 9000;
+const port = process.env.PORT || 9000;
+const root = __dirname;
 
 const server = http.createServer((req, res) => {
     // Remove query strings (ex: ?v=2.1)
-    const cleanUrl = req.url.split('?')[0];
-    let filePath = '.' + cleanUrl;
-    if (filePath === './') {
-        filePath = './index.html';
+    const cleanUrl = decodeURIComponent(req.url.split('?')[0]);
+    const relative = cleanUrl === '/' ? 'index.html' : cleanUrl.replace(/^\/+/, '');
+    const filePath = path.join(root, relative);
+
+    // Nao serve nada fora da pasta do projeto
+    if (!filePath.startsWith(root)) {
+        res.writeHead(403, { 'Content-Type': 'text/html' });
+        res.end('<h1>403 Forbidden</h1>', 'utf-8');
+        return;
     }
 
     const extname = String(path.extname(filePath)).toLowerCase();
@@ -19,9 +25,12 @@ const server = http.createServer((req, res) => {
         '.css': 'text/css',
         '.json': 'application/json',
         '.png': 'image/png',
-        '.jpg': 'image/jpg',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.webp': 'image/webp',
         '.gif': 'image/gif',
         '.svg': 'image/svg+xml',
+        '.mp4': 'video/mp4',
     };
 
     const contentType = mimeTypes[extname] || 'application/octet-stream';
