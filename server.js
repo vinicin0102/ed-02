@@ -1,81 +1,35 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+const zuckpay = require('./zuckpay');
 
 const port = process.env.PORT || 9000;
 const root = __dirname;
 
 /* =====================================================
- * ZUUCKY - CONFIGURACAO
+ * PLANOS - FONTE DA VERDADE DO PRECO
  * =====================================================
- * A chave fica aqui no servidor, NUNCA no HTML.
- * Defina as variaveis de ambiente antes de subir:
- *
- *   ZUUCKY_API_URL=https://...            (endpoint de criacao de pedido)
- *   ZUUCKY_API_KEY=...                    (chave secreta)
- *   ZUUCKY_OFFER_AMOSTRA=...              (id da oferta da amostra)
- *   ZUUCKY_OFFER_KIT4=...                 (id da oferta do kit 4 meses)
+ * O navegador NUNCA envia valor: manda so o id do plano.
  */
-const ZUUCKY = {
-    apiUrl: process.env.ZUUCKY_API_URL || '',
-    apiKey: process.env.ZUUCKY_API_KEY || ''
-};
-
 const PLANOS = {
     amostra: {
-        nome: 'Amostra Gratis - Honey Booster (frete)',
-        valorCentavos: 2290,
-        offerId: process.env.ZUUCKY_OFFER_AMOSTRA || ''
+        nome: 'Amostra Gratis Honey Booster (frete)',
+        valorCentavos: 2290
     },
     kit4: {
-        nome: 'Kit 4 Meses - Honey Booster',
-        valorCentavos: 4780,
-        offerId: process.env.ZUUCKY_OFFER_KIT4 || ''
+        nome: 'Kit 4 Meses Honey Booster',
+        valorCentavos: 4780
     }
 };
-
-/* Monta o corpo enviado a Zuucky.
- * ATENCAO: os nomes dos campos abaixo seguem o formato mais comum de
- * gateway brasileiro. Confira a documentacao da Zuucky e ajuste AQUI,
- * num lugar so, se os nomes forem outros. */
-function montarPedidoZuucky(plano, cliente, endereco) {
-    return {
-        offer_id: plano.offerId,
-        amount: plano.valorCentavos,
-        description: plano.nome,
-        customer: {
-            name: cliente.nome,
-            email: cliente.email,
-            document: cliente.cpf,
-            phone: cliente.telefone
-        },
-        shipping: {
-            zip_code: endereco.cep,
-            street: endereco.rua,
-            number: endereco.numero,
-            neighborhood: endereco.bairro,
-            city: endereco.cidade,
-            state: endereco.uf
-        }
-    };
-}
-
-/* A resposta tambem varia por gateway: procura a URL em varios campos. */
-function extrairCheckoutUrl(resposta) {
-    if (!resposta || typeof resposta !== 'object') return '';
-    return resposta.checkout_url
-        || resposta.checkoutUrl
-        || resposta.payment_url
-        || resposta.url
-        || (resposta.data && extrairCheckoutUrl(resposta.data))
-        || '';
-}
 
 function responderJson(res, status, corpo) {
     const texto = JSON.stringify(corpo);
     res.writeHead(status, {
         'Content-Type': 'application/json; charset=utf-8',
-        'Content-Length': Buffer.byteLength(texto)
+        'Content-Length': Buffer.byteLength(texto),
+        'Cache-Control': 'no-store'
     });
     res.end(texto);
 }
@@ -104,10 +58,28 @@ function lerCorpo(req) {
     });
 }
 
-function campoVazio(valor) {
+function textoVazio(valor) {
     return typeof valor !== 'string' || valor.trim() === '';
 }
 
+function validarPedido(cliente, endereco) {
+    const erros = [];
+
+    if (textoVazio(cliente.nome) || cliente.nome.trim().length < 3) erros.push('nome');
+    if (textoVazio(cliente.email) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cliente.email)) erros.push('e-mail');
+    if (String(cliente.cpf || '').length !== 11) erros.push('CPF');
+    if (String(cliente.telefone || '').length < 10) erros.push('telefone');
+
+    for (const campo of ['cep', 'rua', 'numero', 'bairro', 'cidade', 'uf']) {
+        if (textoVazio(endereco[campo])) erros.push(campo);
+    }
+
+    return erros;
+}
+
+/* =====================================================
+ * POST /api/checkout - cria a cobranca PIX na ZuckPay
+ * ===================================================== */
 async function criarCheckout(req, res) {
     let pedido;
     try {
@@ -125,60 +97,118 @@ async function criarCheckout(req, res) {
 
     const cliente = pedido.cliente || {};
     const endereco = pedido.endereco || {};
+    const erros = validarPedido(cliente, endereco);
 
-    const faltando = ['nome', 'email', 'cpf', 'telefone'].filter((c) => campoVazio(cliente[c]))
-        .concat(['cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'].filter((c) => campoVazio(endereco[c])));
-
-    if (faltando.length) {
-        responderJson(res, 400, { erro: 'Preencha todos os campos: ' + faltando.join(', ') + '.' });
+    if (erros.length) {
+        responderJson(res, 422, { erro: 'Confira estes campos: ' + erros.join(', ') + '.' });
         return;
     }
 
-    if (!ZUUCKY.apiUrl || !ZUUCKY.apiKey || !plano.offerId) {
-        console.error('[checkout] Zuucky nao configurada. Defina ZUUCKY_API_URL, ZUUCKY_API_KEY e o id da oferta.');
-        responderJson(res, 503, {
-            erro: 'Pagamento indisponivel no momento. Tente novamente em instantes.'
+    if (!zuckpay.configurada()) {
+        console.error('[checkout] ZuckPay nao configurada. Defina ZUCKPAY_CLIENT_ID e ZUCKPAY_CLIENT_SECRET.');
+        responderJson(res, 503, { erro: 'Pagamento indisponivel no momento. Tente novamente em instantes.' });
+        return;
+    }
+
+    const externalId = 'ed02-' + crypto.randomUUID();
+
+    try {
+        const pix = await zuckpay.criarPix({
+            valorCentavos: plano.valorCentavos,
+            descricao: plano.nome,
+            cliente: {
+                nome: cliente.nome.trim(),
+                email: cliente.email.trim(),
+                cpf: String(cliente.cpf),
+                telefone: String(cliente.telefone)
+            },
+            externalId,
+            urlNotificacao: process.env.ZUCKPAY_WEBHOOK_URL
         });
+
+        if (!pix.copiaECola) {
+            console.error('[checkout] a ZuckPay nao devolveu o copia e cola.');
+            responderJson(res, 502, { erro: 'Nao foi possivel gerar o PIX agora. Tente novamente.' });
+            return;
+        }
+
+        /* O endereco de entrega NAO vai para a ZuckPay (a API de PIX nao
+         * recebe endereco). Fica registrado aqui para o despacho. */
+        console.log('[pedido]', JSON.stringify({
+            externalId,
+            transactionId: pix.transactionId,
+            plano: pedido.plano,
+            valorCentavos: plano.valorCentavos,
+            entrega: {
+                nome: cliente.nome.trim(),
+                telefone: String(cliente.telefone),
+                cep: endereco.cep,
+                rua: endereco.rua,
+                numero: endereco.numero,
+                bairro: endereco.bairro,
+                cidade: endereco.cidade,
+                uf: endereco.uf
+            }
+        }));
+
+        responderJson(res, 201, {
+            transactionId: pix.transactionId,
+            copiaECola: pix.copiaECola,
+            qrcodeImagem: pix.qrcodeImagem,
+            valorCentavos: plano.valorCentavos,
+            plano: pedido.plano
+        });
+    } catch (e) {
+        console.error('[checkout] falhou:', e.message);
+        responderJson(res, 502, { erro: 'Nao foi possivel gerar o PIX agora. Tente novamente.' });
+    }
+}
+
+/* =====================================================
+ * GET /api/status?transactionId=... - polling do pagamento
+ * ===================================================== */
+async function consultarStatus(req, res, query) {
+    const transactionId = query.get('transactionId') || '';
+
+    if (!/^[A-Za-z0-9._:-]{1,100}$/.test(transactionId)) {
+        responderJson(res, 400, { erro: 'transactionId invalido.' });
+        return;
+    }
+
+    if (!zuckpay.configurada()) {
+        responderJson(res, 503, { erro: 'Pagamento indisponivel no momento.' });
         return;
     }
 
     try {
-        const resposta = await fetch(ZUUCKY.apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + ZUUCKY.apiKey
-            },
-            body: JSON.stringify(montarPedidoZuucky(plano, cliente, endereco))
-        });
-
-        const dados = await resposta.json().catch(() => ({}));
-        const checkoutUrl = extrairCheckoutUrl(dados);
-
-        if (!resposta.ok || !checkoutUrl) {
-            console.error('[checkout] Zuucky respondeu', resposta.status, JSON.stringify(dados).slice(0, 500));
-            responderJson(res, 502, { erro: 'Nao foi possivel abrir o pagamento. Tente novamente.' });
-            return;
-        }
-
-        responderJson(res, 200, { checkoutUrl });
+        const info = await zuckpay.consultarStatus(transactionId);
+        responderJson(res, 200, { status: info.status });
     } catch (e) {
-        console.error('[checkout] falha ao chamar a Zuucky:', e.message);
-        responderJson(res, 502, { erro: 'Nao foi possivel abrir o pagamento. Tente novamente.' });
+        console.error('[status] falhou:', e.message);
+        responderJson(res, 502, { erro: 'Nao foi possivel consultar o pagamento.' });
     }
 }
 
 const server = http.createServer((req, res) => {
-    // Remove query strings (ex: ?v=2.1)
-    const cleanUrl = decodeURIComponent(req.url.split('?')[0]);
+    const partes = req.url.split('?');
+    const cleanUrl = decodeURIComponent(partes[0]);
+    const query = new URLSearchParams(partes[1] || '');
 
-    // API de checkout
     if (cleanUrl === '/api/checkout') {
         if (req.method !== 'POST') {
             responderJson(res, 405, { erro: 'Metodo nao permitido.' });
             return;
         }
         criarCheckout(req, res);
+        return;
+    }
+
+    if (cleanUrl === '/api/status') {
+        if (req.method !== 'GET') {
+            responderJson(res, 405, { erro: 'Metodo nao permitido.' });
+            return;
+        }
+        consultarStatus(req, res, query);
         return;
     }
 
@@ -227,7 +257,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, () => {
     console.log(`Server running at http://127.0.0.1:${port}/`);
-    if (!ZUUCKY.apiUrl || !ZUUCKY.apiKey) {
-        console.log('[checkout] Zuucky ainda nao configurada (ZUUCKY_API_URL / ZUUCKY_API_KEY).');
+    if (!zuckpay.configurada()) {
+        console.log('[checkout] ZuckPay ainda nao configurada (ZUCKPAY_CLIENT_ID / ZUCKPAY_CLIENT_SECRET).');
     }
 });

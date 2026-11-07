@@ -818,8 +818,9 @@
         <div class="modal-content">
             <button class="close-modal" onclick="closeAddressModal()">×</button>
 
-            <h2 style="color: #ff003c; margin-bottom: 20px;">ONDE DEVEMOS ENTREGAR?</h2>
-            <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 25px;">Preencha para calcular o envio discreto.</p>
+            <h2 id="modal-titulo" style="color: #ff003c; margin-bottom: 20px;">ONDE DEVEMOS ENTREGAR?</h2>
+            <p id="modal-subtitulo" style="color: #ccc; font-size: 0.9rem; margin-bottom: 25px;">Preencha para calcular
+                o envio discreto.</p>
 
             <div id="plano-resumo"
                 style="background: #111; border: 1px solid #333; border-radius: 10px; padding: 12px 14px; margin-bottom: 20px; text-align: left;">
@@ -890,6 +891,33 @@
                     style="display: none; color: #fca5a5; background: rgba(220,38,38,.12); border: 1px solid rgba(220,38,38,.35); border-radius: 8px; padding: 10px; font-size: 0.82rem; margin-top: 12px; text-align: left;">
                 </p>
             </form>
+
+            <!-- AREA DO PIX (aparece depois que a cobranca e criada) -->
+            <div id="pix-area" style="display: none; text-align: center;">
+                <div
+                    style="background: rgba(22,163,74,.12); border: 1px solid rgba(22,163,74,.4); border-radius: 10px; padding: 10px; margin-bottom: 18px;">
+                    <strong style="color: #4ade80; font-size: 0.9rem;">✓ Pedido reservado</strong>
+                    <div style="color: #bbb; font-size: 0.8rem; margin-top: 2px;">
+                        Pague o PIX abaixo para confirmar — <strong id="pix-valor" style="color: #f59e0b;"></strong>
+                    </div>
+                </div>
+
+                <img id="pix-qrcode" alt="QR Code do PIX"
+                    style="display: none; width: 220px; height: 220px; background: #fff; padding: 8px; border-radius: 10px; margin: 0 auto 16px;">
+
+                <p style="color: #ccc; font-size: 0.82rem; margin-bottom: 8px;">Ou copie o código PIX:</p>
+
+                <textarea id="pix-copia-cola" readonly
+                    style="width: 100%; height: 70px; background: #0d0d10; color: #ddd; border: 1px solid #333; border-radius: 8px; padding: 10px; font-size: 0.72rem; font-family: monospace; resize: none;"></textarea>
+
+                <button type="button" id="pix-copiar" onclick="copiarPix()" class="submit-btn"
+                    style="margin-top: 12px;">COPIAR CÓDIGO PIX</button>
+
+                <div id="pix-status"
+                    style="margin-top: 16px; color: #f59e0b; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-circle-notch fa-spin"></i> Aguardando o pagamento...
+                </div>
+            </div>
 
             <div style="margin-top: 15px; font-size: 0.75rem; color: #666;">
                 <i class="fas fa-lock"></i> Seus dados estão 100% protegidos e criptografados.

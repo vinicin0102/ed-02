@@ -401,7 +401,7 @@ window.submitShippingForm = async function (event) {
     if (erroEl) erroEl.style.display = 'none';
 
     if (btn) {
-        btn.innerText = 'PROCESSANDO...';
+        btn.innerText = 'GERANDO PIX...';
         btn.disabled = true;
     }
 
@@ -412,7 +412,7 @@ window.submitShippingForm = async function (event) {
         }
     };
 
-    // Compatibilidade: se veio uma URL direta, mantem o comportamento antigo
+    // Compatibilidade: se veio uma URL direta, mantem o redirecionamento antigo
     if (!planoSelecionado) {
         if (currentCheckoutUrl) {
             window.location.href = currentCheckoutUrl;
@@ -451,19 +451,135 @@ window.submitShippingForm = async function (event) {
 
         const dados = await resposta.json().catch(() => ({}));
 
-        if (resposta.ok && dados.checkoutUrl) {
-            window.location.href = dados.checkoutUrl;
+        if (resposta.ok && dados.copiaECola) {
+            mostrarPix(dados);
             return;
         }
 
-        mostrarErroCheckout(dados.erro || 'Não foi possível abrir o pagamento. Tente novamente.');
+        mostrarErroCheckout(dados.erro || 'N\u00e3o foi poss\u00edvel gerar o PIX. Tente novamente.');
     } catch (err) {
         console.error('[checkout]', err);
-        mostrarErroCheckout('Falha de conexão ao abrir o pagamento. Verifique sua internet e tente de novo.');
+        mostrarErroCheckout('Falha de conex\u00e3o. Verifique sua internet e tente de novo.');
     }
 
     restaurarBotao();
 };
+
+/** Troca o formulario pelo QR Code e comeca a acompanhar o pagamento. */
+function mostrarPix(dados) {
+    const form = document.getElementById('shipping-form');
+    const resumo = document.getElementById('plano-resumo');
+    const area = document.getElementById('pix-area');
+    if (form) form.style.display = 'none';
+    if (resumo) resumo.style.display = 'none';
+    if (!area) return;
+
+    const titulo = document.getElementById('modal-titulo');
+    const subtitulo = document.getElementById('modal-subtitulo');
+    if (titulo) titulo.textContent = 'PAGUE COM PIX PARA CONFIRMAR';
+    if (subtitulo) subtitulo.textContent = 'Leia o QR Code no app do seu banco. A confirmacao e automatica.';
+
+    const valorEl = document.getElementById('pix-valor');
+    if (valorEl) valorEl.textContent = formatarBRL((dados.valorCentavos || 0) / 100);
+
+    const img = document.getElementById('pix-qrcode');
+    if (img && dados.qrcodeImagem) {
+        // pode vir como URL, data URI ou base64 puro
+        const src = /^(https?:|data:)/.test(dados.qrcodeImagem)
+            ? dados.qrcodeImagem
+            : 'data:image/png;base64,' + dados.qrcodeImagem;
+        img.src = src;
+        img.style.display = 'block';
+    }
+
+    const campo = document.getElementById('pix-copia-cola');
+    if (campo) campo.value = dados.copiaECola;
+
+    area.style.display = 'block';
+
+    if (dados.transactionId) acompanharPagamento(dados.transactionId);
+}
+
+window.copiarPix = function () {
+    const campo = document.getElementById('pix-copia-cola');
+    const btn = document.getElementById('pix-copiar');
+    if (!campo) return;
+
+    const confirmar = () => {
+        if (!btn) return;
+        const antes = btn.innerText;
+        btn.innerText = 'C\u00d3DIGO COPIADO!';
+        setTimeout(() => { btn.innerText = antes; }, 2000);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(campo.value).then(confirmar).catch(() => {
+            campo.select();
+            document.execCommand('copy');
+            confirmar();
+        });
+    } else {
+        campo.select();
+        document.execCommand('copy');
+        confirmar();
+    }
+};
+
+/** Consulta /api/status ate o pagamento cair (ou ate desistir). */
+function acompanharPagamento(transactionId) {
+    const statusEl = document.getElementById('pix-status');
+    const limite = Date.now() + 20 * 60 * 1000; // 20 minutos
+    let falhasSeguidas = 0;
+
+    const consultar = async () => {
+        if (Date.now() > limite) {
+            if (statusEl) statusEl.innerHTML = 'O tempo desta cobran\u00e7a expirou. Recarregue a p\u00e1gina para gerar outra.';
+            return;
+        }
+
+        try {
+            const r = await fetch('/api/status?transactionId=' + encodeURIComponent(transactionId));
+            const d = await r.json().catch(() => ({}));
+
+            if (d.status === 'APPROVED') {
+                if (statusEl) {
+                    statusEl.style.color = '#4ade80';
+                    statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Pagamento confirmado! Redirecionando...';
+                }
+                if (typeof fbq === 'function') {
+                    fbq('track', 'Purchase');
+                }
+                setTimeout(() => { window.location.href = 'obrigado.html'; }, 1500);
+                return;
+            }
+
+            if (d.status === 'FAILED') {
+                if (statusEl) {
+                    statusEl.style.color = '#fca5a5';
+                    statusEl.innerHTML = 'A cobran\u00e7a expirou ou foi cancelada. Recarregue a p\u00e1gina para tentar de novo.';
+                }
+                return;
+            }
+            // resposta sem status conhecido conta como falha
+            falhasSeguidas = r.ok && d.status ? 0 : falhasSeguidas + 1;
+        } catch (e) {
+            falhasSeguidas++;
+        }
+
+        // nao martela o servidor se ele estiver fora do ar
+        if (falhasSeguidas >= 6) {
+            if (statusEl) {
+                statusEl.style.color = '#fca5a5';
+                statusEl.innerHTML = 'Não conseguimos confirmar o pagamento agora. Se você já pagou, recarregue a página em instantes.';
+            }
+            return;
+        }
+
+        setTimeout(consultar, 4000);
+    };
+
+    setTimeout(consultar, 4000);
+}
 
 // Auto-complete de CEP
 document.addEventListener('DOMContentLoaded', () => {
