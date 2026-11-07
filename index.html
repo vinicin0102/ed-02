@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avaliação de Potência Masculina - Protocolo Alpha</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .hidden-step {
@@ -14,31 +15,37 @@
         }
 
         .next-btn {
-            background: linear-gradient(90deg, #b91c1c, #991b1b);
+            background: linear-gradient(90deg, #dc2626, #991b1b);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 17px 40px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 0.03em;
             border-radius: 50px;
-            margin-top: 25px;
+            margin-top: 24px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(185, 28, 28, 0.4);
-            transition: 0.3s;
+            box-shadow: 0 10px 28px rgba(185, 28, 28, 0.35);
+            transition: 0.25s;
             text-transform: uppercase;
             width: 100%;
+            font-family: inherit;
         }
 
-        .next-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(185, 28, 28, 0.7);
+        .next-btn:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 34px rgba(220, 38, 38, 0.55);
         }
 
         .next-btn:disabled {
-            background: #333;
+            background: #26262c;
+            color: #6b6b75;
             cursor: not-allowed;
             box-shadow: none;
-            opacity: 0.5;
+        }
+
+        .start-btn {
+            background: linear-gradient(90deg, #dc2626, #ef4444);
         }
 
         .scan-line {
@@ -53,18 +60,60 @@
         }
 
         @keyframes scanMove {
-            0% {
-                top: 0;
-            }
-
-            100% {
-                top: 100%;
-            }
+            0% { top: 0; }
+            100% { top: 100%; }
         }
 
-        .emoji-option {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        /* tela inicial */
+        .intro-title {
+            font-size: 1.9rem;
+            font-weight: 900;
+            line-height: 1.15;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        .intro-title span {
+            color: #ef4444;
+        }
+
+        .intro-text {
+            color: #a1a1aa;
+            margin: 16px 0 18px;
+            line-height: 1.6;
+        }
+
+        .alert-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: #fca5a5;
+            font-size: 0.86rem;
+            line-height: 1.45;
+        }
+
+        .trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+            font-size: 0.75rem;
+            color: #6b6b75;
+            font-weight: 600;
+        }
+
+        .result-alert {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
         }
     </style>
     <script>
@@ -108,212 +157,298 @@
         <!-- HEADER COM BARRA DE PROGRESSO -->
         <div class="quiz-header">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <span style="color: #666; font-size: 0.8rem;">SESSÃO: #ALPHA-MALE-01</span>
-                <span style="color: #0f0; font-size: 0.8rem;"><i class="fas fa-satellite-dish"></i> SEGURO &
-                    ANÔNIMO</span>
+                <span style="color: #6b6b75; font-size: 0.75rem; font-weight: 600;">🔒 SESSÃO: #ALPHA-MALE-01</span>
+                <span style="color: #4ade80; font-size: 0.75rem; font-weight: 600;"><i
+                        class="fas fa-satellite-dish"></i> SEGURO &amp; ANÔNIMO</span>
             </div>
-            <div class="progress-container" style="background: #333; height: 8px; border-radius: 4px;">
-                <div id="progress" class="progress-bar"
-                    style="height: 100%; background: linear-gradient(90deg, #dc2626, #f59e0b); width: 0%; transition: width 0.5s;">
-                </div>
+            <div class="progress-container">
+                <div id="progress" class="progress-bar"></div>
+            </div>
+            <div class="progress-meta">
+                <span id="progress-label">Avaliação confidencial</span>
+                <span><strong id="progress-pct">0%</strong> concluído</span>
             </div>
         </div>
 
         <!-- STEP 0: INICIAL (HOOK AGRESSIVO) -->
         <div id="step-start" class="question-card" style="text-align: center;">
             <div class="radar-scan"></div>
-            <h1 style="font-size: 1.8rem; color: white;">TESTE DE VITALIDADE MASCULINA</h1>
-            <p style="color: #aaa; margin: 15px 0;">Responda a este questionário confidencial para descobrir a <strong
+            <h1 class="intro-title">TESTE DE <span>VITALIDADE</span> MASCULINA</h1>
+            <p class="intro-text">Responda a este questionário confidencial para descobrir a <strong
                     style="color: #ef4444;">RAIZ OCULTA</strong> dos seus problemas de ereção e performance.</p>
-            <p style="color: #dc2626; font-size: 0.9rem; margin-bottom: 20px;">⚠️ Atenção: Análise baseada em
-                biomarcadores urológicos.</p>
-            <button class="next-btn pulse" onclick="goToStep(1)">INICIAR ANÁLISE ➤</button>
+            <div class="alert-box">
+                <span style="font-size: 1.3rem;">⚠️</span>
+                <span>Análise baseada em <strong>biomarcadores urológicos</strong>. Leva menos de 2 minutos.</span>
+            </div>
+            <button class="next-btn start-btn pulse" onclick="goToStep(1)">🚀 INICIAR ANÁLISE</button>
+            <div class="trust-row">
+                <span>🕒 2 min</span>
+                <span>🔐 100% anônimo</span>
+                <span>👨 +37.000 homens</span>
+            </div>
         </div>
 
         <!-- STEP 1: IDADE -->
         <div id="step-1" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 1/14: Qual sua idade?</p>
+            <span class="q-badge">Pergunta 1 de 14</span>
+            <p class="question-text"><span class="q-emoji">🎂</span>Qual sua idade?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(2)">18 a 29 anos</button>
-                <button class="option-btn" onclick="goToStep(2)">30 a 39 anos</button>
-                <button class="option-btn" onclick="goToStep(2)">40 a 49 anos (Queda Hormonal)</button>
-                <button class="option-btn" onclick="goToStep(2)">50 a 59 anos</button>
-                <button class="option-btn" onclick="goToStep(2)">60+ anos (Risco Elevado)</button>
+                <button class="option-btn" onclick="choose(this, 2)"><span class="opt-emoji">🔥</span>18 a 29
+                    anos</button>
+                <button class="option-btn" onclick="choose(this, 2)"><span class="opt-emoji">💪</span>30 a 39
+                    anos</button>
+                <button class="option-btn" onclick="choose(this, 2)"><span class="opt-emoji">⚠️</span>40 a 49 anos
+                    (Queda Hormonal)</button>
+                <button class="option-btn" onclick="choose(this, 2)"><span class="opt-emoji">🕐</span>50 a 59
+                    anos</button>
+                <button class="option-btn" onclick="choose(this, 2)"><span class="opt-emoji">🚨</span>60+ anos (Risco
+                    Elevado)</button>
             </div>
         </div>
 
-        <!-- STEP 2: ESTADO CIVIL (NOVO) -->
+        <!-- STEP 2: ESTADO CIVIL -->
         <div id="step-2" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 2/14: Qual seu estado civil atual?</p>
+            <span class="q-badge">Pergunta 2 de 14</span>
+            <p class="question-text"><span class="q-emoji">💍</span>Qual seu estado civil atual?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(3)">Solteiro (Vida sexual ativa)</button>
-                <button class="option-btn" onclick="goToStep(3)">Casado / Namorando</button>
-                <button class="option-btn" onclick="goToStep(3)">Divorciado / Viúvo recentemente</button>
-                <button class="option-btn" onclick="goToStep(3)">Solteiro (Sem parceira fixa)</button>
+                <button class="option-btn" onclick="choose(this, 3)"><span class="opt-emoji">🕺</span>Solteiro (Vida
+                    sexual ativa)</button>
+                <button class="option-btn" onclick="choose(this, 3)"><span class="opt-emoji">❤️</span>Casado /
+                    Namorando</button>
+                <button class="option-btn" onclick="choose(this, 3)"><span class="opt-emoji">💔</span>Divorciado /
+                    Viúvo recentemente</button>
+                <button class="option-btn" onclick="choose(this, 3)"><span class="opt-emoji">🙍</span>Solteiro (Sem
+                    parceira fixa)</button>
             </div>
         </div>
 
         <!-- STEP 3: FREQUÊNCIA DE FALHA -->
         <div id="step-3" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 3/14: Com que frequência você sente que "falha" ou não performa como
-                gostaria?</p>
+            <span class="q-badge">Pergunta 3 de 14</span>
+            <p class="question-text"><span class="q-emoji">📉</span>Com que frequência você sente que "falha" ou não
+                performa como gostaria?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(4)">Raramente (Aconteceu 1 ou 2 vezes)</button>
-                <button class="option-btn" onclick="goToStep(4)">Às vezes (Quando estou estressado/cansado)</button>
-                <button class="option-btn" onclick="goToStep(4)">Frequentemente (50% das vezes)</button>
-                <button class="option-btn" onclick="goToStep(4)">Sempre (Não consigo ter relações)</button>
+                <button class="option-btn" onclick="choose(this, 4)"><span class="opt-emoji">😌</span>Raramente
+                    (Aconteceu 1 ou 2 vezes)</button>
+                <button class="option-btn" onclick="choose(this, 4)"><span class="opt-emoji">😓</span>Às vezes (Quando
+                    estou estressado/cansado)</button>
+                <button class="option-btn" onclick="choose(this, 4)"><span class="opt-emoji">😟</span>Frequentemente
+                    (50% das vezes)</button>
+                <button class="option-btn" onclick="choose(this, 4)"><span class="opt-emoji">😰</span>Sempre (Não
+                    consigo ter relações)</button>
             </div>
         </div>
 
         <!-- STEP 4: EREÇÕES MATINAIS -->
         <div id="step-4" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 4/14: Você costuma ter "ereções matinais" (acordar com o pênis ereto)?</p>
-            <p style="font-size: 0.85rem; color: #888; margin-bottom: 15px;">*Isso é um indicador crucial de saúde
-                vascular.</p>
+            <span class="q-badge">Pergunta 4 de 14</span>
+            <p class="question-text"><span class="q-emoji">🌅</span>Você costuma ter "ereções matinais" (acordar com o
+                pênis ereto)?</p>
+            <p class="q-hint">🩺 Isso é um indicador crucial de saúde vascular.</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(5)">Sim, quase todo dia.</button>
-                <button class="option-btn" onclick="goToStep(5)">Às vezes, mas não é tão firme.</button>
-                <button class="option-btn" onclick="goToStep(5)">Raramente / Quase nunca.</button>
-                <button class="option-btn" onclick="goToStep(5)">Não, nunca mais aconteceu.</button>
+                <button class="option-btn" onclick="choose(this, 5)"><span class="opt-emoji">✅</span>Sim, quase todo
+                    dia.</button>
+                <button class="option-btn" onclick="choose(this, 5)"><span class="opt-emoji">🤔</span>Às vezes, mas
+                    não é tão firme.</button>
+                <button class="option-btn" onclick="choose(this, 5)"><span class="opt-emoji">📉</span>Raramente /
+                    Quase nunca.</button>
+                <button class="option-btn" onclick="choose(this, 5)"><span class="opt-emoji">❌</span>Não, nunca mais
+                    aconteceu.</button>
             </div>
         </div>
 
         <!-- STEP 5: HARDNESS -->
         <div id="step-5" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 5/14: Como você descreveria a qualidade da sua ereção hoje?</p>
+            <span class="q-badge">Pergunta 5 de 14</span>
+            <p class="question-text"><span class="q-emoji">💪</span>Como você descreveria a qualidade da sua ereção
+                hoje?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(6)">🍌 100% Rígida (Como uma rocha)</button>
-                <button class="option-btn" onclick="goToStep(6)">🥒 70% Rígida (Dá pra usar, mas perde força)</button>
-                <button class="option-btn" onclick="goToStep(6)">🌭 40% Rígida (Meia-bomba / Mole)</button>
-                <button class="option-btn" onclick="goToStep(6)">🥀 0% (Não sobe de jeito nenhum)</button>
+                <button class="option-btn" onclick="choose(this, 6)"><span class="opt-emoji">🍌</span>100% Rígida
+                    (Como uma rocha)</button>
+                <button class="option-btn" onclick="choose(this, 6)"><span class="opt-emoji">🥒</span>70% Rígida (Dá
+                    pra usar, mas perde força)</button>
+                <button class="option-btn" onclick="choose(this, 6)"><span class="opt-emoji">🌭</span>40% Rígida
+                    (Meia-bomba / Mole)</button>
+                <button class="option-btn" onclick="choose(this, 6)"><span class="opt-emoji">🥀</span>0% (Não sobe de
+                    jeito nenhum)</button>
             </div>
         </div>
 
-        <!-- STEP 6: CURVATURA (NOVO) -->
+        <!-- STEP 6: CURVATURA -->
         <div id="step-6" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 6/14: Você notou alguma curvatura ou dor durante a ereção?</p>
+            <span class="q-badge">Pergunta 6 de 14</span>
+            <p class="question-text"><span class="q-emoji">📐</span>Você notou alguma curvatura ou dor durante a
+                ereção?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(7)">Não, é reto e indolor.</button>
-                <button class="option-btn" onclick="goToStep(7)">Leve curvatura, sem dor.</button>
-                <button class="option-btn" onclick="goToStep(7)">Curvatura acentuada (Parece estar torto).</button>
-                <button class="option-btn" onclick="goToStep(7)">Sinto dor/desconforto quando fica ereto.</button>
+                <button class="option-btn" onclick="choose(this, 7)"><span class="opt-emoji">✅</span>Não, é reto e
+                    indolor.</button>
+                <button class="option-btn" onclick="choose(this, 7)"><span class="opt-emoji">↩️</span>Leve curvatura,
+                    sem dor.</button>
+                <button class="option-btn" onclick="choose(this, 7)"><span class="opt-emoji">⚠️</span>Curvatura
+                    acentuada (Parece estar torto).</button>
+                <button class="option-btn" onclick="choose(this, 7)"><span class="opt-emoji">🤕</span>Sinto
+                    dor/desconforto quando fica ereto.</button>
             </div>
         </div>
 
         <!-- STEP 7: PORNOGRAFIA -->
         <div id="step-7" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 7/14: Seja honesto (confidencial): Com que frequência você consome
-                pornografia?</p>
+            <span class="q-badge">Pergunta 7 de 14</span>
+            <p class="question-text"><span class="q-emoji">📱</span>Seja honesto (confidencial): com que frequência
+                você consome pornografia?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(8)">Várias vezes por semana / Diariamente</button>
-                <button class="option-btn" onclick="goToStep(8)">Eventualmente (1x por semana)</button>
-                <button class="option-btn" onclick="goToStep(8)">Raramente / Quase nunca</button>
-                <button class="option-btn" onclick="goToStep(8)">Nunca assisto.</button>
+                <button class="option-btn" onclick="choose(this, 8)"><span class="opt-emoji">🔴</span>Várias vezes por
+                    semana / Diariamente</button>
+                <button class="option-btn" onclick="choose(this, 8)"><span class="opt-emoji">🟠</span>Eventualmente
+                    (1x por semana)</button>
+                <button class="option-btn" onclick="choose(this, 8)"><span class="opt-emoji">🟡</span>Raramente /
+                    Quase nunca</button>
+                <button class="option-btn" onclick="choose(this, 8)"><span class="opt-emoji">🟢</span>Nunca
+                    assisto.</button>
             </div>
         </div>
 
         <!-- STEP 8: ESTIMULANTES -->
         <div id="step-8" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 8/14: Você já precisou usar "pílulas azuis" ou estimulantes de farmácia?
-            </p>
+            <span class="q-badge">Pergunta 8 de 14</span>
+            <p class="question-text"><span class="q-emoji">💊</span>Você já precisou usar "pílulas azuis" ou
+                estimulantes de farmácia?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(9)">Sim, uso com frequência.</button>
-                <button class="option-btn" onclick="goToStep(9)">Sim, tentei mas me deu efeitos colaterais.</button>
-                <button class="option-btn" onclick="goToStep(9)">Sim, mas parou de funcionar.</button>
-                <button class="option-btn" onclick="goToStep(9)">Não, nunca usei e tenho medo/vergonha.</button>
+                <button class="option-btn" onclick="choose(this, 9)"><span class="opt-emoji">🔵</span>Sim, uso com
+                    frequência.</button>
+                <button class="option-btn" onclick="choose(this, 9)"><span class="opt-emoji">🤢</span>Sim, tentei mas
+                    me deu efeitos colaterais.</button>
+                <button class="option-btn" onclick="choose(this, 9)"><span class="opt-emoji">📉</span>Sim, mas parou
+                    de funcionar.</button>
+                <button class="option-btn" onclick="choose(this, 9)"><span class="opt-emoji">🚫</span>Não, nunca usei
+                    e tenho medo/vergonha.</button>
             </div>
         </div>
 
         <!-- STEP 9: DURAÇÃO -->
         <div id="step-9" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 9/14: Quando consegue o ato, quanto tempo você dura em média?</p>
+            <span class="q-badge">Pergunta 9 de 14</span>
+            <p class="question-text"><span class="q-emoji">⏱️</span>Quando consegue o ato, quanto tempo você dura em
+                média?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(10)">Menos de 2 minutos (Ejaculação Precoce)</button>
-                <button class="option-btn" onclick="goToStep(10)">Entre 2 a 5 minutos (Rápido)</button>
-                <button class="option-btn" onclick="goToStep(10)">Mais de 10 minutos (Normal)</button>
-                <button class="option-btn" onclick="goToStep(10)">Demoro muito / Difícil gozar</button>
+                <button class="option-btn" onclick="choose(this, 10)"><span class="opt-emoji">⚡</span>Menos de 2
+                    minutos (Ejaculação Precoce)</button>
+                <button class="option-btn" onclick="choose(this, 10)"><span class="opt-emoji">🕐</span>Entre 2 a 5
+                    minutos (Rápido)</button>
+                <button class="option-btn" onclick="choose(this, 10)"><span class="opt-emoji">✅</span>Mais de 10
+                    minutos (Normal)</button>
+                <button class="option-btn" onclick="choose(this, 10)"><span class="opt-emoji">🔄</span>Demoro muito /
+                    Difícil gozar</button>
             </div>
         </div>
 
-        <!-- STEP 10: TAMANHO/INSEGURANÇA (NOVO) -->
+        <!-- STEP 10: TAMANHO/INSEGURANÇA -->
         <div id="step-10" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 10/14: Como você se sente em relação ao TAMANHO do seu membro?</p>
+            <span class="q-badge">Pergunta 10 de 14</span>
+            <p class="question-text"><span class="q-emoji">📏</span>Como você se sente em relação ao TAMANHO do seu
+                membro?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(11)">Satisfeito / Sem problemas.</button>
-                <button class="option-btn" onclick="goToStep(11)">Gostaria de ganhar +1 a 2cm.</button>
-                <button class="option-btn" onclick="goToStep(11)">Inseguro. Queria ganhar +3cm ou mais.</button>
-                <button class="option-btn" onclick="goToStep(11)">Tenho vergonha (Micropênis).</button>
+                <button class="option-btn" onclick="choose(this, 11)"><span class="opt-emoji">😎</span>Satisfeito /
+                    Sem problemas.</button>
+                <button class="option-btn" onclick="choose(this, 11)"><span class="opt-emoji">📈</span>Gostaria de
+                    ganhar +1 a 2cm.</button>
+                <button class="option-btn" onclick="choose(this, 11)"><span class="opt-emoji">🎯</span>Inseguro.
+                    Queria ganhar +3cm ou mais.</button>
+                <button class="option-btn" onclick="choose(this, 11)"><span class="opt-emoji">😔</span>Tenho vergonha
+                    (Micropênis).</button>
             </div>
         </div>
 
-        <!-- STEP 11: SAÚDE PRÓSTATA/URINÁRIA (NOVO) -->
+        <!-- STEP 11: SAÚDE PRÓSTATA/URINÁRIA -->
         <div id="step-11" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 11/14: Sobre sua rotina urinária:</p>
+            <span class="q-badge">Pergunta 11 de 14</span>
+            <p class="question-text"><span class="q-emoji">🚻</span>Sobre sua rotina urinária:</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(12)">Normal, jato forte e sem dor.</button>
-                <button class="option-btn" onclick="goToStep(12)">Acordo à noite para urinar (1 ou mais vezes).</button>
-                <button class="option-btn" onclick="goToStep(12)">Sinto que não esvazio a bexiga toda.</button>
-                <button class="option-btn" onclick="goToStep(12)">Jato fraco / Pinga-pinga.</button>
+                <button class="option-btn" onclick="choose(this, 12)"><span class="opt-emoji">✅</span>Normal, jato
+                    forte e sem dor.</button>
+                <button class="option-btn" onclick="choose(this, 12)"><span class="opt-emoji">🌙</span>Acordo à noite
+                    para urinar (1 ou mais vezes).</button>
+                <button class="option-btn" onclick="choose(this, 12)"><span class="opt-emoji">💧</span>Sinto que não
+                    esvazio a bexiga toda.</button>
+                <button class="option-btn" onclick="choose(this, 12)"><span class="opt-emoji">🚿</span>Jato fraco /
+                    Pinga-pinga.</button>
             </div>
         </div>
 
         <!-- STEP 12: IMPACTO NA PARCEIRA -->
         <div id="step-12" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 12/14: Como isso tem afetado seu relacionamento?</p>
+            <span class="q-badge">Pergunta 12 de 14</span>
+            <p class="question-text"><span class="q-emoji">💔</span>Como isso tem afetado seu relacionamento?</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(13)">Ela reclama ou sinto que está decepcionada.</button>
-                <button class="option-btn" onclick="goToStep(13)">Eu evito o sexo por medo de falhar.</button>
-                <button class="option-btn" onclick="goToStep(13)">Ela diz que "está tudo bem", mas sei que não
-                    está.</button>
-                <button class="option-btn" onclick="goToStep(13)">Não estou em um relacionamento no momento.</button>
+                <button class="option-btn" onclick="choose(this, 13)"><span class="opt-emoji">😞</span>Ela reclama ou
+                    sinto que está decepcionada.</button>
+                <button class="option-btn" onclick="choose(this, 13)"><span class="opt-emoji">🙈</span>Eu evito o sexo
+                    por medo de falhar.</button>
+                <button class="option-btn" onclick="choose(this, 13)"><span class="opt-emoji">🎭</span>Ela diz que
+                    "está tudo bem", mas sei que não está.</button>
+                <button class="option-btn" onclick="choose(this, 13)"><span class="opt-emoji">🚶</span>Não estou em um
+                    relacionamento no momento.</button>
             </div>
         </div>
 
         <!-- STEP 13: META (ZONAS) -->
         <div id="step-13" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 13/14: Se você pudesse resolver UM problema hoje, qual seria?</p>
-            <p style="font-size: 0.9rem; color: #888; margin-bottom: 20px;">(Selecione quantos quiser)</p>
+            <span class="q-badge">Pergunta 13 de 14</span>
+            <p class="question-text"><span class="q-emoji">🎯</span>Se você pudesse resolver UM problema hoje, qual
+                seria?</p>
+            <p class="q-hint">👆 Selecione quantos quiser</p>
 
             <div class="body-zones">
                 <div class="zone-btn" onclick="toggleZone(this)">
-                    <i class="fas fa-ruler-vertical"></i> <span>Aumentar Tamanho</span>
+                    <span class="zone-emoji">📏</span> <span>Aumentar Tamanho</span>
                 </div>
                 <div class="zone-btn" onclick="toggleZone(this)">
-                    <i class="fas fa-hammer"></i> <span>Ereção de Aço</span>
+                    <span class="zone-emoji">🔨</span> <span>Ereção de Aço</span>
                 </div>
                 <div class="zone-btn" onclick="toggleZone(this)">
-                    <i class="fas fa-stopwatch"></i> <span>Fim da Ejaculação Precoce</span>
+                    <span class="zone-emoji">⏱️</span> <span>Fim da Ejaculação Precoce</span>
                 </div>
                 <div class="zone-btn" onclick="toggleZone(this)">
-                    <i class="fas fa-fire"></i> <span>Libido de 20 Anos</span>
+                    <span class="zone-emoji">🔥</span> <span>Libido de 20 Anos</span>
                 </div>
             </div>
-            <button id="btn-step-13" class="next-btn" disabled onclick="goToStep(14)">PRÓXIMO</button>
+            <button id="btn-step-13" class="next-btn" disabled onclick="goToStep(14)">PRÓXIMO ➤</button>
         </div>
 
         <!-- STEP 14: SINTOMAS FINAIS -->
         <div id="step-14" class="question-card hidden-step">
-            <p class="question-text">PERGUNTA 14/14: Além da parte sexual, você sente:</p>
+            <span class="q-badge">Pergunta 14 de 14</span>
+            <p class="question-text"><span class="q-emoji">⚡</span>Além da parte sexual, você sente:</p>
             <div class="options">
-                <button class="option-btn" onclick="goToStep(15)">Cansaço excessivo / Falta de energia</button>
-                <button class="option-btn" onclick="goToStep(15)">Gordura abdominal acumulada</button>
-                <button class="option-btn" onclick="goToStep(15)">Falta de foco / Irritabilidade</button>
-                <button class="option-btn" onclick="goToStep(15)">TODOS OS SINTOMAS ACIMA</button>
+                <button class="option-btn" onclick="choose(this, 15)"><span class="opt-emoji">🔋</span>Cansaço
+                    excessivo / Falta de energia</button>
+                <button class="option-btn" onclick="choose(this, 15)"><span class="opt-emoji">🍺</span>Gordura
+                    abdominal acumulada</button>
+                <button class="option-btn" onclick="choose(this, 15)"><span class="opt-emoji">🧠</span>Falta de foco /
+                    Irritabilidade</button>
+                <button class="option-btn" onclick="choose(this, 15)"><span class="opt-emoji">🔥</span>TODOS OS
+                    SINTOMAS ACIMA</button>
             </div>
         </div>
 
         <!-- STEP 15: COMPROMISSO FINAL -->
         <div id="step-15" class="question-card hidden-step">
-            <p class="question-text">ANÁLISE CONCLUÍDA.</p>
-            <p style="color: #ccc; margin-bottom: 20px;">Nosso sistema identificou um <strong
-                    style="color: #ef4444;">BLOQUEIO VASCULAR</strong> severo no seu perfil.</p>
-            <p class="question-text">Existe uma solução natural, mas você precisa se comprometer a seguir o protocolo.
-                Você aceita?</p>
+            <p class="question-text" style="margin-bottom: 16px;"><span class="q-emoji">🧬</span>ANÁLISE CONCLUÍDA</p>
+            <div class="result-alert">
+                <p style="color: #e4e4e7; line-height: 1.55; font-size: 0.95rem;">🚨 Nosso sistema identificou um
+                    <strong style="color: #ef4444;">BLOQUEIO VASCULAR</strong> severo no seu perfil.
+                </p>
+            </div>
+            <p class="question-text" style="font-size: 1.1rem;">Existe uma solução natural, mas você precisa se
+                comprometer a seguir o protocolo. Você aceita?</p>
             <div class="options">
                 <button class="option-btn pulse"
-                    style="background: #16a34a; color: white; border: none; font-weight: 900;"
-                    onclick="goToStep(16)">SIM! QUERO RECUPERAR MINHA MASCULINIDADE!</button>
-                <button class="option-btn" onclick="goToStep(16)">Não, prefiro continuar falhando.</button>
+                    style="background: #16a34a; color: white; border-color: #16a34a; font-weight: 900;"
+                    onclick="choose(this, 16)"><span class="opt-emoji"
+                        style="background: rgba(0,0,0,.25); border-color: rgba(255,255,255,.3);">✅</span>SIM! QUERO
+                    RECUPERAR MINHA MASCULINIDADE!</button>
+                <button class="option-btn" onclick="choose(this, 16)"><span class="opt-emoji">🙅</span>Não, prefiro
+                    continuar falhando.</button>
             </div>
         </div>
 
@@ -322,7 +457,7 @@
             style="position: relative; overflow: hidden; padding-top: 40px;">
             <div class="scan-line"></div>
             <div class="radar-scan" style="width: 80px; height: 80px; margin: 0 auto 20px auto;"></div>
-            <h2 style="color: #f59e0b; text-align: center;">GERANDO PROTOCOLO...</h2>
+            <h2 style="color: #f59e0b; text-align: center; font-size: 1.3rem;">⚙️ GERANDO PROTOCOLO...</h2>
 
             <div id="terminal-screen" class="terminal-log">
                 <!-- Linhas inseridas via JS -->
@@ -334,6 +469,9 @@
     <script>
         let selectedZones = 0;
         const TOTAL_STEPS = 16;
+        const QUESTIONS_TOTAL = 14;
+        const stepHistory = [];
+        let currentStep = 0;
 
         function toggleZone(element) {
             element.classList.toggle('selected');
@@ -349,7 +487,29 @@
             }
         }
 
-        function goToStep(step) {
+        /* Marca a opcao escolhida e avanca logo em seguida (feedback visual) */
+        function choose(element, step) {
+            const card = element.closest('.question-card');
+            const buttons = card.querySelectorAll('.option-btn');
+            buttons.forEach(function (b) {
+                b.classList.remove('selected');
+                b.disabled = true;
+            });
+            element.classList.add('selected');
+
+            setTimeout(function () {
+                buttons.forEach(function (b) {
+                    b.classList.remove('selected');
+                    b.disabled = false;
+                });
+                goToStep(step);
+            }, 260);
+        }
+
+        function goToStep(step, isBack) {
+            if (!isBack && currentStep !== step) stepHistory.push(currentStep);
+            currentStep = step;
+
             // Esconder todos
             document.getElementById('step-start').style.display = 'none';
             for (let i = 1; i <= TOTAL_STEPS; i++) {
@@ -358,24 +518,68 @@
             }
 
             // Mostrar atual
-            const target = document.getElementById('step-' + step);
-            if (target) target.style.display = 'block';
+            const target = step === 0
+                ? document.getElementById('step-start')
+                : document.getElementById('step-' + step);
 
-            // Barra progresso
-            const progress = document.getElementById('progress');
-            // Calcula progresso base 14 perguntas (passo 15+ é final)
-            // Se step > 14 (compromisso/processamento), barra cheia.
-            const questionsTotal = 14;
-            let currentQ = step - 1; // step 1 = pergunta 1
-            if (currentQ > questionsTotal) currentQ = questionsTotal;
-
-            const pct = Math.min(100, Math.round((currentQ / questionsTotal) * 100));
-            progress.style.width = pct + '%';
-
-            // Se for o último step (processamento), iniciar
-            if (step === 16) {
-                startProcessing();
+            if (target) {
+                target.style.display = 'block';
+                // reinicia a animacao de entrada do card
+                target.style.animation = 'none';
+                void target.offsetWidth;
+                target.style.animation = '';
             }
+
+            updateProgress(step);
+            renderBackButton(target, step);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (step === 16) startProcessing();
+        }
+
+        function goBack() {
+            const prev = stepHistory.pop();
+            if (prev === undefined) return;
+            goToStep(prev, true);
+        }
+
+        function updateProgress(step) {
+            const bar = document.getElementById('progress');
+            const label = document.getElementById('progress-label');
+            const pctEl = document.getElementById('progress-pct');
+
+            let currentQ = step;
+            if (currentQ < 0) currentQ = 0;
+            if (currentQ > QUESTIONS_TOTAL) currentQ = QUESTIONS_TOTAL;
+
+            const pct = Math.min(100, Math.round((currentQ / QUESTIONS_TOTAL) * 100));
+            bar.style.width = pct + '%';
+            pctEl.textContent = pct + '%';
+
+            if (step === 0) {
+                label.textContent = 'Avaliação confidencial';
+            } else if (step <= QUESTIONS_TOTAL) {
+                label.textContent = 'Pergunta ' + step + ' de ' + QUESTIONS_TOTAL;
+            } else {
+                label.textContent = '✅ Respostas completas';
+            }
+        }
+
+        /* Botao de voltar: so nas perguntas, nunca no processamento */
+        function renderBackButton(card, step) {
+            const old = document.querySelectorAll('.back-btn');
+            for (let i = 0; i < old.length; i++) old[i].remove();
+
+            if (!card || step === 0 || step > QUESTIONS_TOTAL || stepHistory.length === 0) return;
+
+            const btn = document.createElement('button');
+            btn.className = 'back-btn';
+            btn.type = 'button';
+            btn.title = 'Voltar';
+            btn.setAttribute('aria-label', 'Voltar para a pergunta anterior');
+            btn.textContent = '‹';
+            btn.onclick = goBack;
+            card.appendChild(btn);
         }
 
         function startProcessing() {
@@ -408,7 +612,7 @@
                     i++;
                     setTimeout(typeLine, 500);
                 } else {
-                    setTimeout(() => {
+                    setTimeout(function () {
                         window.location.href = 'vsl.html';
                     }, 1500);
                 }
